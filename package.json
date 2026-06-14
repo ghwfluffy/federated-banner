@@ -1,0 +1,37 @@
+{
+  "name": "@ghwiz/federated-banner",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "main": "./dist/federated-banner.umd.cjs",
+  "module": "./dist/federated-banner.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/federated-banner.js",
+      "require": "./dist/federated-banner.umd.cjs"
+    },
+    "./standalone": {
+      "import": "./dist/browser/federated-banner.js"
+    }
+  },
+  "scripts": {
+    "build": "rm -rf dist && vite build && vite build --config vite.standalone.config.ts && vue-tsc -p tsconfig.build.json",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "typescript": "^5.9.3",
+    "vite": "^5.4.21",
+    "vue": "^3.5.25",
+    "vue-tsc": "^3.1.8"
+  }
+}
