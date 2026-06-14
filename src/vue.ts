@@ -5,6 +5,7 @@ import type { FederatedBannerMenuItem, FederatedBannerSite, FederatedBannerUser 
 type BannerElement = HTMLElement & {
   user: FederatedBannerUser | null;
   sites: FederatedBannerSite[];
+  actionItems: FederatedBannerMenuItem[];
   appItems: FederatedBannerMenuItem[];
   accountItems: FederatedBannerMenuItem[];
 };
@@ -20,6 +21,7 @@ export const FederatedBanner = defineComponent({
     showSignOut: { type: Boolean, default: true },
     user: { type: Object as () => FederatedBannerUser | null, default: null },
     sites: { type: Array as () => FederatedBannerSite[], default: () => [] },
+    actionItems: { type: Array as () => FederatedBannerMenuItem[], default: () => [] },
     appItems: { type: Array as () => FederatedBannerMenuItem[], default: () => [] },
     accountItems: { type: Array as () => FederatedBannerMenuItem[], default: () => [] },
   },
@@ -36,6 +38,7 @@ export const FederatedBanner = defineComponent({
       }
       elementRef.value.user = props.user;
       elementRef.value.sites = props.sites;
+      elementRef.value.actionItems = props.actionItems;
       elementRef.value.appItems = props.appItems;
       elementRef.value.accountItems = props.accountItems;
     }
@@ -63,7 +66,7 @@ export const FederatedBanner = defineComponent({
     });
 
     watch(
-      () => [props.user, props.sites, props.appItems, props.accountItems],
+      () => [props.user, props.sites, props.actionItems, props.appItems, props.accountItems],
       syncProperties,
       { deep: true },
     );

@@ -1,4 +1,4 @@
-(function(r,a){typeof exports=="object"&&typeof module<"u"?a(exports,require("vue")):typeof define=="function"&&define.amd?define(["exports","vue"],a):(r=typeof globalThis<"u"?globalThis:r||self,a(r.GhwizFederatedBanner={},r.Vue))})(this,function(r,a){"use strict";var F=Object.defineProperty;var G=(r,a,c)=>a in r?F(r,a,{enumerable:!0,configurable:!0,writable:!0,value:c}):r[a]=c;var p=(r,a,c)=>G(r,typeof a!="symbol"?a+"":a,c);const c="ghwiz-federated-banner",x=`
+(function(i,a){typeof exports=="object"&&typeof module<"u"?a(exports,require("vue")):typeof define=="function"&&define.amd?define(["exports","vue"],a):(i=typeof globalThis<"u"?globalThis:i||self,a(i.GhwizFederatedBanner={},i.Vue))})(this,function(i,a){"use strict";var C=Object.defineProperty;var O=(i,a,u)=>a in i?C(i,a,{enumerable:!0,configurable:!0,writable:!0,value:u}):i[a]=u;var c=(i,a,u)=>O(i,typeof a!="symbol"?a+"":a,u);const u="ghwiz-federated-banner",z=`
 :host {
   display: block;
   color-scheme: light;
@@ -76,6 +76,58 @@
 }
 button {
   font: inherit;
+}
+.icon-action {
+  position: relative;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid var(--ghwiz-banner-border);
+  border-radius: 8px;
+  background: #f8fafc;
+  color: var(--ghwiz-banner-text);
+  text-decoration: none;
+  cursor: pointer;
+}
+.icon-action:hover,
+.icon-action:focus-visible {
+  border-color: #aab7ca;
+  outline: 0;
+  background: #eef4ff;
+}
+.icon-action:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+.icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.action-badge {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ghwiz-banner-bg);
+  border-radius: 999px;
+  background: var(--ghwiz-banner-danger);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1;
 }
 .trigger {
   min-height: 2.4rem;
@@ -156,7 +208,7 @@ button {
   width: 100%;
   min-height: 2.35rem;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 0.1rem;
   align-items: center;
   border: 0;
@@ -190,7 +242,13 @@ button {
   font-size: 0.92rem;
   font-weight: 680;
 }
+.item-external-icon {
+  width: 0.92rem;
+  height: 0.92rem;
+  color: var(--ghwiz-banner-muted);
+}
 .item-description {
+  grid-column: 1 / -1;
   color: var(--ghwiz-banner-muted);
   font-size: 0.78rem;
   line-height: 1.25;
@@ -204,12 +262,13 @@ button {
   .banner {
     min-height: 3.5rem;
     padding: 0.55rem 0.75rem;
+    gap: 0.5rem;
   }
   .brand-system {
     display: none;
   }
   .brand-app {
-    max-width: 9.5rem;
+    max-width: min(9.5rem, 34vw);
     font-size: 0.94rem;
   }
   .brand-mark {
@@ -223,37 +282,60 @@ button {
     min-height: 2.25rem;
     padding: 0.3rem 0.5rem;
   }
+  .icon-action {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+  .menu {
+    position: fixed;
+    top: 4.1rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    width: auto;
+    max-height: calc(100vh - 5.25rem);
+  }
+  .apps-menu {
+    width: auto;
+  }
 }
-`;function l(e){return e.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}function z(e){const n=((e==null?void 0:e.avatarFallback)||(e==null?void 0:e.displayName)||(e==null?void 0:e.username)||"GH").trim(),t=n.split(/[\s._-]+/).filter(Boolean);return t.length>=2?`${t[0][0]??""}${t[1][0]??""}`.toUpperCase()||"GH":(t[0]??n).slice(0,2).toUpperCase()||"GH"}function A(e){const n=l(e.label);if(e.href&&!e.disabled){const t=e.external?' target="_blank" rel="noreferrer"':"";return`<a class="menu-link${e.danger?" danger":""}" href="${l(e.href)}"${t} data-menu-close="true"><span class="item-label">${n}</span></a>`}return`<button class="menu-button${e.danger?" danger":""}" type="button" data-action="${l(e.id)}"${e.disabled?" disabled":""}><span class="item-label">${n}</span></button>`}class g extends HTMLElement{constructor(){super(...arguments);p(this,"openMenu",null);p(this,"_sites",[]);p(this,"_user",null);p(this,"_appItems",[]);p(this,"_accountItems",[])}static get observedAttributes(){return["app-name","app-url","brand-label","current-app-slug","account-settings-url","show-sign-out"]}set sites(t){this._sites=Array.isArray(t)?t:[],this.render()}get sites(){return this._sites}set user(t){this._user=t??null,this.render()}get user(){return this._user}set appItems(t){this._appItems=Array.isArray(t)?t:[],this.render()}get appItems(){return this._appItems}set accountItems(t){this._accountItems=Array.isArray(t)?t:[],this.render()}get accountItems(){return this._accountItems}connectedCallback(){this.shadowRoot||this.attachShadow({mode:"open"}),this.render()}attributeChangedCallback(){this.render()}attr(t,s=""){return this.getAttribute(t)??s}boolAttr(t,s=!0){const o=this.getAttribute(t);return o===null?s:o!=="false"}closeMenus(){this.openMenu=null,this.render()}emitAction(t){this.dispatchEvent(new CustomEvent("federated-banner-action",{bubbles:!0,composed:!0,detail:{action:t}}))}bindEvents(){var s,o;const t=this.shadowRoot;t&&((s=t.querySelector("[data-toggle-apps]"))==null||s.addEventListener("click",()=>{this.openMenu=this.openMenu==="apps"?null:"apps",this.render()}),(o=t.querySelector("[data-toggle-account]"))==null||o.addEventListener("click",()=>{this.openMenu=this.openMenu==="account"?null:"account",this.render()}),t.querySelectorAll("[data-action]").forEach(i=>{i.addEventListener("click",()=>{const d=i.dataset.action;d&&(this.closeMenus(),this.emitAction(d))})}),t.querySelectorAll("[data-menu-close]").forEach(i=>{i.addEventListener("click",()=>this.closeMenus())}))}render(){var w,v,y;if(!this.shadowRoot)return;const t=this.attr("app-name","GHWIZ"),s=this.attr("app-url","#"),o=this.attr("brand-label","GHWIZ"),i=this.attr("current-app-slug",""),d=this.attr("account-settings-url","#"),h=this.boolAttr("show-sign-out",!0),I=((w=this._user)==null?void 0:w.displayName)||((v=this._user)==null?void 0:v.username)||"Account",U=(y=this._user)!=null&&y.avatarUrl?`<img src="${l(this._user.avatarUrl)}" alt="">`:l(z(this._user)),_=this._sites.length>0?this._sites.map(m=>`
-          <a class="menu-link" href="${l(m.baseUrl)}" ${m.slug===i?'aria-current="page"':""} data-menu-close="true">
-            <span class="item-label">${l(m.name)}</span>
-            ${m.description?`<span class="item-description">${l(m.description)}</span>`:""}
+`;function s(e){return e.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}function k(e){const n=((e==null?void 0:e.avatarFallback)||(e==null?void 0:e.displayName)||(e==null?void 0:e.username)||"GH").trim(),t=n.split(/[\s._-]+/).filter(Boolean);return t.length>=2?`${t[0][0]??""}${t[1][0]??""}`.toUpperCase()||"GH":(t[0]??n).slice(0,2).toUpperCase()||"GH"}function g(e,n="icon"){return e==="bell"?`<svg class="${n}" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M10.3 21a2 2 0 0 0 3.4 0"></path>
+      <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+    </svg>`:e==="external-link"?`<svg class="${n}" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M15 3h6v6"></path>
+      <path d="M10 14 21 3"></path>
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+    </svg>`:`<span aria-hidden="true">${s((e||"?").slice(0,2).toUpperCase())}</span>`}function A(e){return e==null||e===""?"":`<span class="action-badge">${s(String(e))}</span>`}function I(e){const n=s(e.label),t=g(e.icon||e.id),r=A(e.badge);if(e.href&&!e.disabled){const o=e.external?' target="_blank" rel="noreferrer"':"";return`<a class="icon-action" href="${s(e.href)}"${o} data-menu-close="true" aria-label="${n}" title="${n}">${t}${r}</a>`}return`<button class="icon-action" type="button" data-action="${s(e.id)}"${e.disabled?" disabled":""} aria-label="${n}" title="${n}">${t}${r}</button>`}function S(e){const n=s(e.label),t=e.external||e.externalIndicator?g("external-link","icon item-external-icon"):"";if(e.href&&!e.disabled){const r=e.external?' target="_blank" rel="noreferrer"':"";return`<a class="menu-link${e.danger?" danger":""}" href="${s(e.href)}"${r} data-menu-close="true"><span class="item-label">${n}</span>${t}</a>`}return`<button class="menu-button${e.danger?" danger":""}" type="button" data-action="${s(e.id)}"${e.disabled?" disabled":""}><span class="item-label">${n}</span>${t}</button>`}class b extends HTMLElement{constructor(){super(...arguments);c(this,"openMenu",null);c(this,"_sites",[]);c(this,"_user",null);c(this,"_actionItems",[]);c(this,"_appItems",[]);c(this,"_accountItems",[])}static get observedAttributes(){return["app-name","app-url","brand-label","current-app-slug","account-settings-url","show-sign-out"]}set sites(t){this._sites=Array.isArray(t)?t:[],this.render()}get sites(){return this._sites}set user(t){this._user=t??null,this.render()}get user(){return this._user}set actionItems(t){this._actionItems=Array.isArray(t)?t:[],this.render()}get actionItems(){return this._actionItems}set appItems(t){this._appItems=Array.isArray(t)?t:[],this.render()}get appItems(){return this._appItems}set accountItems(t){this._accountItems=Array.isArray(t)?t:[],this.render()}get accountItems(){return this._accountItems}connectedCallback(){this.shadowRoot||this.attachShadow({mode:"open"}),this.render()}attributeChangedCallback(){this.render()}attr(t,r=""){return this.getAttribute(t)??r}boolAttr(t,r=!0){const o=this.getAttribute(t);return o===null?r:o!=="false"}closeMenus(){this.openMenu=null,this.render()}emitAction(t){this.dispatchEvent(new CustomEvent("federated-banner-action",{bubbles:!0,composed:!0,detail:{action:t}}))}bindEvents(){var r,o;const t=this.shadowRoot;t&&((r=t.querySelector("[data-toggle-apps]"))==null||r.addEventListener("click",()=>{this.openMenu=this.openMenu==="apps"?null:"apps",this.render()}),(o=t.querySelector("[data-toggle-account]"))==null||o.addEventListener("click",()=>{this.openMenu=this.openMenu==="account"?null:"account",this.render()}),t.querySelectorAll("[data-action]").forEach(l=>{l.addEventListener("click",()=>{const d=l.dataset.action;d&&(this.closeMenus(),this.emitAction(d))})}),t.querySelectorAll("[data-menu-close]").forEach(l=>{l.addEventListener("click",()=>this.closeMenus())}))}render(){var y,x,$;if(!this.shadowRoot)return;const t=this.attr("app-name","GHWIZ"),r=this.attr("app-url","#"),o=this.attr("brand-label","GHWIZ"),l=this.attr("current-app-slug",""),d=this.attr("account-settings-url","#"),m=this.boolAttr("show-sign-out",!0),B=((y=this._user)==null?void 0:y.displayName)||((x=this._user)==null?void 0:x.username)||"Account",E=($=this._user)!=null&&$.avatarUrl?`<img src="${s(this._user.avatarUrl)}" alt="">`:s(k(this._user)),v=this._sites.length>0,F=v?this._sites.map(h=>`
+          <a class="menu-link" href="${s(h.baseUrl)}" ${h.slug===l?'aria-current="page"':""} data-menu-close="true">
+            <span class="item-label">${s(h.name)}</span>
+            ${h.description?`<span class="item-description">${s(h.description)}</span>`:""}
           </a>
-        `).join(""):'<div class="empty">No federated apps are configured.</div>',M=d==="#"?[]:[{id:"account-settings",label:"Account Settings",href:d}],B=h?[{id:"sign-out",label:"Sign Out",danger:!0}]:[],E=[...M,...this._accountItems,...this._appItems,...B].map(A).join("");this.shadowRoot.innerHTML=`
-      <style>${x}</style>
+        `).join(""):"",G=this._actionItems.map(I).join(""),j=d==="#"?[]:[{id:"account-settings",label:"Account Settings",href:d,externalIndicator:l!=="federated-services"}],H=m?[{id:"sign-out",label:"Sign Out",danger:!0}]:[],L=[...j,...this._accountItems,...this._appItems,...H].map(S).join("");this.shadowRoot.innerHTML=`
+      <style>${z}</style>
       <header class="banner">
-        <a class="brand" href="${l(s)}">
+        <a class="brand" href="${s(r)}">
           <span class="brand-mark">GH</span>
           <span class="brand-text">
-            <span class="brand-system">${l(o)}</span>
-            <span class="brand-app">${l(t)}</span>
+            <span class="brand-system">${s(o)}</span>
+            <span class="brand-app">${s(t)}</span>
           </span>
         </a>
         <div class="actions">
-          <div class="menu-wrap">
+          ${G}
+          ${v?`<div class="menu-wrap">
             <button class="trigger" type="button" data-toggle-apps aria-expanded="${this.openMenu==="apps"}">
               <span>Apps</span><span class="caret" aria-hidden="true">v</span>
             </button>
-            ${this.openMenu==="apps"?`<div class="menu apps-menu"><div class="menu-heading">Switch App</div>${_}</div>`:""}
-          </div>
+            ${this.openMenu==="apps"?`<div class="menu apps-menu"><div class="menu-heading">Switch App</div>${F}</div>`:""}
+          </div>`:""}
           <div class="menu-wrap">
             <button class="trigger" type="button" data-toggle-account aria-expanded="${this.openMenu==="account"}">
-              <span class="avatar">${U}</span>
-              <span class="user-name">${l(I)}</span>
+              <span class="avatar">${E}</span>
+              <span class="user-name">${s(B)}</span>
               <span class="caret" aria-hidden="true">v</span>
             </button>
-            ${this.openMenu==="account"?`<div class="menu"><div class="menu-heading">Account</div>${E}</div>`:""}
+            ${this.openMenu==="account"?`<div class="menu"><div class="menu-heading">Account</div>${L}</div>`:""}
           </div>
         </div>
       </header>
-    `,this.bindEvents()}}function b(e=c){typeof window>"u"||window.customElements.get(e)||window.customElements.define(e,g)}function f(e){const n=(e??"").trim();return n===""||n==="#"?"":n.replace(/\/+$/,"")||"/"}function u(e,n,t,s){const o=f(t);return o?{slug:e,name:n,baseUrl:o,description:s}:null}function k(e){const n=f(e);return n?`${n}?tab=profile`:"#"}function S(e){return[u("federated-services","Federated Services",e.authBaseUrl,"Account settings and federated service administration."),u("goals","Goal Tracker",e.goalsBaseUrl,"Goals, metrics, dashboards, and progress widgets."),u("money-planner","Fluffynomics",e.moneyPlannerBaseUrl,"Accounts, expenses, contracts, investments, and net worth."),u("agent","AI Assistant",e.agentBaseUrl,"Assistant tasks, mailbox workflows, and audited agent activity."),u("apartment-gate","Apartment Gate",e.apartmentGateBaseUrl,"Protected apartment gate and door controls."),u("file-share","File Share",e.fileShareBaseUrl,"Uploads, expiring share links, and revocation.")].filter(n=>n!==null)}const $=a.defineComponent({name:"FederatedBanner",props:{appName:{type:String,required:!0},appUrl:{type:String,default:"#"},brandLabel:{type:String,default:"GHWIZ"},currentAppSlug:{type:String,required:!0},accountSettingsUrl:{type:String,default:"#"},showSignOut:{type:Boolean,default:!0},user:{type:Object,default:null},sites:{type:Array,default:()=>[]},appItems:{type:Array,default:()=>[]},accountItems:{type:Array,default:()=>[]}},emits:{action:e=>!0,signOut:()=>!0},setup(e,{emit:n}){const t=a.ref(null);function s(){t.value&&(t.value.user=e.user,t.value.sites=e.sites,t.value.appItems=e.appItems,t.value.accountItems=e.accountItems)}function o(i){var h;const d=(h=i.detail)==null?void 0:h.action;if(d){if(d==="sign-out"){n("signOut");return}n("action",d)}}return a.onMounted(()=>{var i;b(),s(),(i=t.value)==null||i.addEventListener("federated-banner-action",o)}),a.onBeforeUnmount(()=>{var i;(i=t.value)==null||i.removeEventListener("federated-banner-action",o)}),a.watch(()=>[e.user,e.sites,e.appItems,e.accountItems],s,{deep:!0}),()=>a.h("ghwiz-federated-banner",{ref:t,"app-name":e.appName,"app-url":e.appUrl,"brand-label":e.brandLabel,"current-app-slug":e.currentAppSlug,"account-settings-url":e.accountSettingsUrl,"show-sign-out":e.showSignOut?"true":"false"})}});r.FederatedBanner=$,r.GhwizFederatedBannerElement=g,r.accountSettingsUrl=k,r.createGhwizFederatedSites=S,r.defineFederatedBannerElement=b,Object.defineProperty(r,Symbol.toStringTag,{value:"Module"})});
+    `,this.bindEvents()}}function f(e=u){typeof window>"u"||window.customElements.get(e)||window.customElements.define(e,b)}function w(e){const n=(e??"").trim();return n===""||n==="#"?"":n.replace(/\/+$/,"")||"/"}function p(e,n,t,r){const o=w(t);return o?{slug:e,name:n,baseUrl:o,description:r}:null}function M(e){const n=w(e);return n?`${n}?tab=account-settings`:"#"}function _(e){return[p("federated-services","Federated Services",e.authBaseUrl,"Account settings and federated service administration."),p("goals","Goal Tracker",e.goalsBaseUrl,"Goals, metrics, dashboards, and progress widgets."),p("money-planner","Fluffynomics",e.moneyPlannerBaseUrl,"Accounts, expenses, contracts, investments, and net worth."),p("agent","AI Assistant",e.agentBaseUrl,"Assistant tasks, mailbox workflows, and audited agent activity."),p("apartment-gate","Apartment Gate",e.apartmentGateBaseUrl,"Protected apartment gate and door controls."),p("file-share","File Share",e.fileShareBaseUrl,"Uploads, expiring share links, and revocation.")].filter(n=>n!==null)}const U=a.defineComponent({name:"FederatedBanner",props:{appName:{type:String,required:!0},appUrl:{type:String,default:"#"},brandLabel:{type:String,default:"GHWIZ"},currentAppSlug:{type:String,required:!0},accountSettingsUrl:{type:String,default:"#"},showSignOut:{type:Boolean,default:!0},user:{type:Object,default:null},sites:{type:Array,default:()=>[]},actionItems:{type:Array,default:()=>[]},appItems:{type:Array,default:()=>[]},accountItems:{type:Array,default:()=>[]}},emits:{action:e=>!0,signOut:()=>!0},setup(e,{emit:n}){const t=a.ref(null);function r(){t.value&&(t.value.user=e.user,t.value.sites=e.sites,t.value.actionItems=e.actionItems,t.value.appItems=e.appItems,t.value.accountItems=e.accountItems)}function o(l){var m;const d=(m=l.detail)==null?void 0:m.action;if(d){if(d==="sign-out"){n("signOut");return}n("action",d)}}return a.onMounted(()=>{var l;f(),r(),(l=t.value)==null||l.addEventListener("federated-banner-action",o)}),a.onBeforeUnmount(()=>{var l;(l=t.value)==null||l.removeEventListener("federated-banner-action",o)}),a.watch(()=>[e.user,e.sites,e.actionItems,e.appItems,e.accountItems],r,{deep:!0}),()=>a.h("ghwiz-federated-banner",{ref:t,"app-name":e.appName,"app-url":e.appUrl,"brand-label":e.brandLabel,"current-app-slug":e.currentAppSlug,"account-settings-url":e.accountSettingsUrl,"show-sign-out":e.showSignOut?"true":"false"})}});i.FederatedBanner=U,i.GhwizFederatedBannerElement=b,i.accountSettingsUrl=M,i.createGhwizFederatedSites=_,i.defineFederatedBannerElement=f,Object.defineProperty(i,Symbol.toStringTag,{value:"Module"})});

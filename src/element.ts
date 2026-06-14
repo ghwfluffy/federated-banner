@@ -81,6 +81,58 @@ const styles = `
 button {
   font: inherit;
 }
+.icon-action {
+  position: relative;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid var(--ghwiz-banner-border);
+  border-radius: 8px;
+  background: #f8fafc;
+  color: var(--ghwiz-banner-text);
+  text-decoration: none;
+  cursor: pointer;
+}
+.icon-action:hover,
+.icon-action:focus-visible {
+  border-color: #aab7ca;
+  outline: 0;
+  background: #eef4ff;
+}
+.icon-action:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+.icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.action-badge {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ghwiz-banner-bg);
+  border-radius: 999px;
+  background: var(--ghwiz-banner-danger);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1;
+}
 .trigger {
   min-height: 2.4rem;
   display: inline-flex;
@@ -160,7 +212,7 @@ button {
   width: 100%;
   min-height: 2.35rem;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 0.1rem;
   align-items: center;
   border: 0;
@@ -194,7 +246,13 @@ button {
   font-size: 0.92rem;
   font-weight: 680;
 }
+.item-external-icon {
+  width: 0.92rem;
+  height: 0.92rem;
+  color: var(--ghwiz-banner-muted);
+}
 .item-description {
+  grid-column: 1 / -1;
   color: var(--ghwiz-banner-muted);
   font-size: 0.78rem;
   line-height: 1.25;
@@ -208,12 +266,13 @@ button {
   .banner {
     min-height: 3.5rem;
     padding: 0.55rem 0.75rem;
+    gap: 0.5rem;
   }
   .brand-system {
     display: none;
   }
   .brand-app {
-    max-width: 9.5rem;
+    max-width: min(9.5rem, 34vw);
     font-size: 0.94rem;
   }
   .brand-mark {
@@ -226,6 +285,21 @@ button {
   .trigger {
     min-height: 2.25rem;
     padding: 0.3rem 0.5rem;
+  }
+  .icon-action {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+  .menu {
+    position: fixed;
+    top: 4.1rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    width: auto;
+    max-height: calc(100vh - 5.25rem);
+  }
+  .apps-menu {
+    width: auto;
   }
 }
 `;
@@ -248,19 +322,58 @@ function initialsFromUser(user: FederatedBannerUser | null): string {
   return (parts[0] ?? source).slice(0, 2).toUpperCase() || "GH";
 }
 
-function itemMarkup(item: FederatedBannerMenuItem): string {
+function iconMarkup(icon: string | null | undefined, className = "icon"): string {
+  if (icon === "bell") {
+    return `<svg class="${className}" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M10.3 21a2 2 0 0 0 3.4 0"></path>
+      <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+    </svg>`;
+  }
+  if (icon === "external-link") {
+    return `<svg class="${className}" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M15 3h6v6"></path>
+      <path d="M10 14 21 3"></path>
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+    </svg>`;
+  }
+  return `<span aria-hidden="true">${escapeHtml((icon || "?").slice(0, 2).toUpperCase())}</span>`;
+}
+
+function badgeMarkup(value: string | number | null | undefined): string {
+  if (value === null || value === undefined || value === "") {
+    return "";
+  }
+  return `<span class="action-badge">${escapeHtml(String(value))}</span>`;
+}
+
+function actionMarkup(item: FederatedBannerMenuItem): string {
   const label = escapeHtml(item.label);
+  const icon = iconMarkup(item.icon || item.id);
+  const badge = badgeMarkup(item.badge);
   if (item.href && !item.disabled) {
     const target = item.external ? ' target="_blank" rel="noreferrer"' : "";
-    return `<a class="menu-link${item.danger ? " danger" : ""}" href="${escapeHtml(item.href)}"${target} data-menu-close="true"><span class="item-label">${label}</span></a>`;
+    return `<a class="icon-action" href="${escapeHtml(item.href)}"${target} data-menu-close="true" aria-label="${label}" title="${label}">${icon}${badge}</a>`;
   }
-  return `<button class="menu-button${item.danger ? " danger" : ""}" type="button" data-action="${escapeHtml(item.id)}"${item.disabled ? " disabled" : ""}><span class="item-label">${label}</span></button>`;
+  return `<button class="icon-action" type="button" data-action="${escapeHtml(item.id)}"${item.disabled ? " disabled" : ""} aria-label="${label}" title="${label}">${icon}${badge}</button>`;
+}
+
+function itemMarkup(item: FederatedBannerMenuItem): string {
+  const label = escapeHtml(item.label);
+  const externalIndicator = item.external || item.externalIndicator
+    ? iconMarkup("external-link", "icon item-external-icon")
+    : "";
+  if (item.href && !item.disabled) {
+    const target = item.external ? ' target="_blank" rel="noreferrer"' : "";
+    return `<a class="menu-link${item.danger ? " danger" : ""}" href="${escapeHtml(item.href)}"${target} data-menu-close="true"><span class="item-label">${label}</span>${externalIndicator}</a>`;
+  }
+  return `<button class="menu-button${item.danger ? " danger" : ""}" type="button" data-action="${escapeHtml(item.id)}"${item.disabled ? " disabled" : ""}><span class="item-label">${label}</span>${externalIndicator}</button>`;
 }
 
 export class GhwizFederatedBannerElement extends HTMLElement {
   private openMenu: "apps" | "account" | null = null;
   private _sites: FederatedBannerSite[] = [];
   private _user: FederatedBannerUser | null = null;
+  private _actionItems: FederatedBannerMenuItem[] = [];
   private _appItems: FederatedBannerMenuItem[] = [];
   private _accountItems: FederatedBannerMenuItem[] = [];
 
@@ -291,6 +404,15 @@ export class GhwizFederatedBannerElement extends HTMLElement {
 
   get user(): FederatedBannerUser | null {
     return this._user;
+  }
+
+  set actionItems(value: FederatedBannerMenuItem[] | null | undefined) {
+    this._actionItems = Array.isArray(value) ? value : [];
+    this.render();
+  }
+
+  get actionItems(): FederatedBannerMenuItem[] {
+    return this._actionItems;
   }
 
   set appItems(value: FederatedBannerMenuItem[] | null | undefined) {
@@ -389,17 +511,24 @@ export class GhwizFederatedBannerElement extends HTMLElement {
     const avatarMarkup = this._user?.avatarUrl
       ? `<img src="${escapeHtml(this._user.avatarUrl)}" alt="">`
       : escapeHtml(initialsFromUser(this._user));
-    const appsMenu = this._sites.length > 0
+    const hasSites = this._sites.length > 0;
+    const appsMenu = hasSites
       ? this._sites.map((site) => `
           <a class="menu-link" href="${escapeHtml(site.baseUrl)}" ${site.slug === currentSlug ? 'aria-current="page"' : ""} data-menu-close="true">
             <span class="item-label">${escapeHtml(site.name)}</span>
             ${site.description ? `<span class="item-description">${escapeHtml(site.description)}</span>` : ""}
           </a>
         `).join("")
-      : `<div class="empty">No federated apps are configured.</div>`;
+      : "";
+    const actionButtons = this._actionItems.map(actionMarkup).join("");
     const accountDefaults: FederatedBannerMenuItem[] = accountSettingsUrl === "#"
       ? []
-      : [{ id: "account-settings", label: "Account Settings", href: accountSettingsUrl }];
+      : [{
+        id: "account-settings",
+        label: "Account Settings",
+        href: accountSettingsUrl,
+        externalIndicator: currentSlug !== "federated-services",
+      }];
     const signOutItem: FederatedBannerMenuItem[] = showSignOut
       ? [{ id: "sign-out", label: "Sign Out", danger: true }]
       : [];
@@ -421,12 +550,13 @@ export class GhwizFederatedBannerElement extends HTMLElement {
           </span>
         </a>
         <div class="actions">
-          <div class="menu-wrap">
+          ${actionButtons}
+          ${hasSites ? `<div class="menu-wrap">
             <button class="trigger" type="button" data-toggle-apps aria-expanded="${this.openMenu === "apps"}">
               <span>Apps</span><span class="caret" aria-hidden="true">v</span>
             </button>
             ${this.openMenu === "apps" ? `<div class="menu apps-menu"><div class="menu-heading">Switch App</div>${appsMenu}</div>` : ""}
-          </div>
+          </div>` : ""}
           <div class="menu-wrap">
             <button class="trigger" type="button" data-toggle-account aria-expanded="${this.openMenu === "account"}">
               <span class="avatar">${avatarMarkup}</span>

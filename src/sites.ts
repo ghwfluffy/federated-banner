@@ -18,7 +18,7 @@ function site(slug: string, name: string, baseUrl: string | null | undefined, de
 
 export function accountSettingsUrl(authBaseUrl: string | null | undefined): string {
   const cleaned = cleanBaseUrl(authBaseUrl);
-  return cleaned ? `${cleaned}?tab=profile` : "#";
+  return cleaned ? `${cleaned}?tab=account-settings` : "#";
 }
 
 export function createGhwizFederatedSites(config: GhwizFederatedSiteConfig): FederatedBannerSite[] {

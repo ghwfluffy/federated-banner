@@ -19,9 +19,11 @@ export interface FederatedBannerMenuItem {
   label: string;
   href?: string | null;
   icon?: string | null;
+  badge?: string | number | null;
   disabled?: boolean;
   danger?: boolean;
   external?: boolean;
+  externalIndicator?: boolean;
 }
 
 export interface GhwizFederatedSiteConfig {

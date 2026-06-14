@@ -32,6 +32,10 @@ export declare const FederatedBanner: import("vue").DefineComponent<import("vue"
         type: () => FederatedBannerSite[];
         default: () => never[];
     };
+    actionItems: {
+        type: () => FederatedBannerMenuItem[];
+        default: () => never[];
+    };
     appItems: {
         type: () => FederatedBannerMenuItem[];
         default: () => never[];
@@ -78,6 +82,10 @@ export declare const FederatedBanner: import("vue").DefineComponent<import("vue"
         type: () => FederatedBannerSite[];
         default: () => never[];
     };
+    actionItems: {
+        type: () => FederatedBannerMenuItem[];
+        default: () => never[];
+    };
     appItems: {
         type: () => FederatedBannerMenuItem[];
         default: () => never[];
@@ -96,6 +104,7 @@ export declare const FederatedBanner: import("vue").DefineComponent<import("vue"
     showSignOut: boolean;
     user: FederatedBannerUser | null;
     sites: FederatedBannerSite[];
+    actionItems: FederatedBannerMenuItem[];
     appItems: FederatedBannerMenuItem[];
     accountItems: FederatedBannerMenuItem[];
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, true, {}, any>;

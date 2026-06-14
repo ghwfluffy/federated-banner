@@ -1,8 +1,8 @@
-var z = Object.defineProperty;
-var A = (e, n, t) => n in e ? z(e, n, { enumerable: !0, configurable: !0, writable: !0, value: t }) : e[n] = t;
-var l = (e, n, t) => A(e, typeof n != "symbol" ? n + "" : n, t);
-import { defineComponent as k, ref as $, onMounted as S, onBeforeUnmount as I, watch as U, h as _ } from "vue";
-const M = "ghwiz-federated-banner", E = `
+var A = Object.defineProperty;
+var I = (e, n, t) => n in e ? A(e, n, { enumerable: !0, configurable: !0, writable: !0, value: t }) : e[n] = t;
+var l = (e, n, t) => I(e, typeof n != "symbol" ? n + "" : n, t);
+import { defineComponent as S, ref as M, onMounted as _, onBeforeUnmount as U, watch as B, h as E } from "vue";
+const G = "ghwiz-federated-banner", F = `
 :host {
   display: block;
   color-scheme: light;
@@ -80,6 +80,58 @@ const M = "ghwiz-federated-banner", E = `
 }
 button {
   font: inherit;
+}
+.icon-action {
+  position: relative;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid var(--ghwiz-banner-border);
+  border-radius: 8px;
+  background: #f8fafc;
+  color: var(--ghwiz-banner-text);
+  text-decoration: none;
+  cursor: pointer;
+}
+.icon-action:hover,
+.icon-action:focus-visible {
+  border-color: #aab7ca;
+  outline: 0;
+  background: #eef4ff;
+}
+.icon-action:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+.icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.action-badge {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ghwiz-banner-bg);
+  border-radius: 999px;
+  background: var(--ghwiz-banner-danger);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1;
 }
 .trigger {
   min-height: 2.4rem;
@@ -160,7 +212,7 @@ button {
   width: 100%;
   min-height: 2.35rem;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 0.1rem;
   align-items: center;
   border: 0;
@@ -194,7 +246,13 @@ button {
   font-size: 0.92rem;
   font-weight: 680;
 }
+.item-external-icon {
+  width: 0.92rem;
+  height: 0.92rem;
+  color: var(--ghwiz-banner-muted);
+}
 .item-description {
+  grid-column: 1 / -1;
   color: var(--ghwiz-banner-muted);
   font-size: 0.78rem;
   line-height: 1.25;
@@ -208,12 +266,13 @@ button {
   .banner {
     min-height: 3.5rem;
     padding: 0.55rem 0.75rem;
+    gap: 0.5rem;
   }
   .brand-system {
     display: none;
   }
   .brand-app {
-    max-width: 9.5rem;
+    max-width: min(9.5rem, 34vw);
     font-size: 0.94rem;
   }
   .brand-mark {
@@ -227,29 +286,66 @@ button {
     min-height: 2.25rem;
     padding: 0.3rem 0.5rem;
   }
+  .icon-action {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+  .menu {
+    position: fixed;
+    top: 4.1rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    width: auto;
+    max-height: calc(100vh - 5.25rem);
+  }
+  .apps-menu {
+    width: auto;
+  }
 }
 `;
-function i(e) {
+function r(e) {
   return e.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 }
-function B(e) {
+function H(e) {
   const n = ((e == null ? void 0 : e.avatarFallback) || (e == null ? void 0 : e.displayName) || (e == null ? void 0 : e.username) || "GH").trim(), t = n.split(/[\s._-]+/).filter(Boolean);
   return t.length >= 2 ? `${t[0][0] ?? ""}${t[1][0] ?? ""}`.toUpperCase() || "GH" : (t[0] ?? n).slice(0, 2).toUpperCase() || "GH";
 }
-function G(e) {
-  const n = i(e.label);
-  if (e.href && !e.disabled) {
-    const t = e.external ? ' target="_blank" rel="noreferrer"' : "";
-    return `<a class="menu-link${e.danger ? " danger" : ""}" href="${i(e.href)}"${t} data-menu-close="true"><span class="item-label">${n}</span></a>`;
-  }
-  return `<button class="menu-button${e.danger ? " danger" : ""}" type="button" data-action="${i(e.id)}"${e.disabled ? " disabled" : ""}><span class="item-label">${n}</span></button>`;
+function b(e, n = "icon") {
+  return e === "bell" ? `<svg class="${n}" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M10.3 21a2 2 0 0 0 3.4 0"></path>
+      <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+    </svg>` : e === "external-link" ? `<svg class="${n}" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M15 3h6v6"></path>
+      <path d="M10 14 21 3"></path>
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+    </svg>` : `<span aria-hidden="true">${r((e || "?").slice(0, 2).toUpperCase())}</span>`;
 }
-class F extends HTMLElement {
+function L(e) {
+  return e == null || e === "" ? "" : `<span class="action-badge">${r(String(e))}</span>`;
+}
+function j(e) {
+  const n = r(e.label), t = b(e.icon || e.id), a = L(e.badge);
+  if (e.href && !e.disabled) {
+    const i = e.external ? ' target="_blank" rel="noreferrer"' : "";
+    return `<a class="icon-action" href="${r(e.href)}"${i} data-menu-close="true" aria-label="${n}" title="${n}">${t}${a}</a>`;
+  }
+  return `<button class="icon-action" type="button" data-action="${r(e.id)}"${e.disabled ? " disabled" : ""} aria-label="${n}" title="${n}">${t}${a}</button>`;
+}
+function C(e) {
+  const n = r(e.label), t = e.external || e.externalIndicator ? b("external-link", "icon item-external-icon") : "";
+  if (e.href && !e.disabled) {
+    const a = e.external ? ' target="_blank" rel="noreferrer"' : "";
+    return `<a class="menu-link${e.danger ? " danger" : ""}" href="${r(e.href)}"${a} data-menu-close="true"><span class="item-label">${n}</span>${t}</a>`;
+  }
+  return `<button class="menu-button${e.danger ? " danger" : ""}" type="button" data-action="${r(e.id)}"${e.disabled ? " disabled" : ""}><span class="item-label">${n}</span>${t}</button>`;
+}
+class O extends HTMLElement {
   constructor() {
     super(...arguments);
     l(this, "openMenu", null);
     l(this, "_sites", []);
     l(this, "_user", null);
+    l(this, "_actionItems", []);
     l(this, "_appItems", []);
     l(this, "_accountItems", []);
   }
@@ -275,6 +371,12 @@ class F extends HTMLElement {
   get user() {
     return this._user;
   }
+  set actionItems(t) {
+    this._actionItems = Array.isArray(t) ? t : [], this.render();
+  }
+  get actionItems() {
+    return this._actionItems;
+  }
   set appItems(t) {
     this._appItems = Array.isArray(t) ? t : [], this.render();
   }
@@ -293,12 +395,12 @@ class F extends HTMLElement {
   attributeChangedCallback() {
     this.render();
   }
-  attr(t, r = "") {
-    return this.getAttribute(t) ?? r;
+  attr(t, a = "") {
+    return this.getAttribute(t) ?? a;
   }
-  boolAttr(t, r = !0) {
-    const s = this.getAttribute(t);
-    return s === null ? r : s !== "false";
+  boolAttr(t, a = !0) {
+    const i = this.getAttribute(t);
+    return i === null ? a : i !== "false";
   }
   closeMenus() {
     this.openMenu = null, this.render();
@@ -311,92 +413,98 @@ class F extends HTMLElement {
     }));
   }
   bindEvents() {
-    var r, s;
+    var a, i;
     const t = this.shadowRoot;
-    t && ((r = t.querySelector("[data-toggle-apps]")) == null || r.addEventListener("click", () => {
+    t && ((a = t.querySelector("[data-toggle-apps]")) == null || a.addEventListener("click", () => {
       this.openMenu = this.openMenu === "apps" ? null : "apps", this.render();
-    }), (s = t.querySelector("[data-toggle-account]")) == null || s.addEventListener("click", () => {
+    }), (i = t.querySelector("[data-toggle-account]")) == null || i.addEventListener("click", () => {
       this.openMenu = this.openMenu === "account" ? null : "account", this.render();
-    }), t.querySelectorAll("[data-action]").forEach((a) => {
-      a.addEventListener("click", () => {
-        const o = a.dataset.action;
+    }), t.querySelectorAll("[data-action]").forEach((s) => {
+      s.addEventListener("click", () => {
+        const o = s.dataset.action;
         o && (this.closeMenus(), this.emitAction(o));
       });
-    }), t.querySelectorAll("[data-menu-close]").forEach((a) => {
-      a.addEventListener("click", () => this.closeMenus());
+    }), t.querySelectorAll("[data-menu-close]").forEach((s) => {
+      s.addEventListener("click", () => this.closeMenus());
     }));
   }
   render() {
-    var p, m, h;
+    var h, m, g;
     if (!this.shadowRoot)
       return;
-    const t = this.attr("app-name", "GHWIZ"), r = this.attr("app-url", "#"), s = this.attr("brand-label", "GHWIZ"), a = this.attr("current-app-slug", ""), o = this.attr("account-settings-url", "#"), u = this.boolAttr("show-sign-out", !0), b = ((p = this._user) == null ? void 0 : p.displayName) || ((m = this._user) == null ? void 0 : m.username) || "Account", f = (h = this._user) != null && h.avatarUrl ? `<img src="${i(this._user.avatarUrl)}" alt="">` : i(B(this._user)), w = this._sites.length > 0 ? this._sites.map((c) => `
-          <a class="menu-link" href="${i(c.baseUrl)}" ${c.slug === a ? 'aria-current="page"' : ""} data-menu-close="true">
-            <span class="item-label">${i(c.name)}</span>
-            ${c.description ? `<span class="item-description">${i(c.description)}</span>` : ""}
+    const t = this.attr("app-name", "GHWIZ"), a = this.attr("app-url", "#"), i = this.attr("brand-label", "GHWIZ"), s = this.attr("current-app-slug", ""), o = this.attr("account-settings-url", "#"), u = this.boolAttr("show-sign-out", !0), w = ((h = this._user) == null ? void 0 : h.displayName) || ((m = this._user) == null ? void 0 : m.username) || "Account", v = (g = this._user) != null && g.avatarUrl ? `<img src="${r(this._user.avatarUrl)}" alt="">` : r(H(this._user)), p = this._sites.length > 0, x = p ? this._sites.map((d) => `
+          <a class="menu-link" href="${r(d.baseUrl)}" ${d.slug === s ? 'aria-current="page"' : ""} data-menu-close="true">
+            <span class="item-label">${r(d.name)}</span>
+            ${d.description ? `<span class="item-description">${r(d.description)}</span>` : ""}
           </a>
-        `).join("") : '<div class="empty">No federated apps are configured.</div>', v = o === "#" ? [] : [{ id: "account-settings", label: "Account Settings", href: o }], y = u ? [{ id: "sign-out", label: "Sign Out", danger: !0 }] : [], x = [
-      ...v,
+        `).join("") : "", y = this._actionItems.map(j).join(""), $ = o === "#" ? [] : [{
+      id: "account-settings",
+      label: "Account Settings",
+      href: o,
+      externalIndicator: s !== "federated-services"
+    }], k = u ? [{ id: "sign-out", label: "Sign Out", danger: !0 }] : [], z = [
+      ...$,
       ...this._accountItems,
       ...this._appItems,
-      ...y
-    ].map(G).join("");
+      ...k
+    ].map(C).join("");
     this.shadowRoot.innerHTML = `
-      <style>${E}</style>
+      <style>${F}</style>
       <header class="banner">
-        <a class="brand" href="${i(r)}">
+        <a class="brand" href="${r(a)}">
           <span class="brand-mark">GH</span>
           <span class="brand-text">
-            <span class="brand-system">${i(s)}</span>
-            <span class="brand-app">${i(t)}</span>
+            <span class="brand-system">${r(i)}</span>
+            <span class="brand-app">${r(t)}</span>
           </span>
         </a>
         <div class="actions">
-          <div class="menu-wrap">
+          ${y}
+          ${p ? `<div class="menu-wrap">
             <button class="trigger" type="button" data-toggle-apps aria-expanded="${this.openMenu === "apps"}">
               <span>Apps</span><span class="caret" aria-hidden="true">v</span>
             </button>
-            ${this.openMenu === "apps" ? `<div class="menu apps-menu"><div class="menu-heading">Switch App</div>${w}</div>` : ""}
-          </div>
+            ${this.openMenu === "apps" ? `<div class="menu apps-menu"><div class="menu-heading">Switch App</div>${x}</div>` : ""}
+          </div>` : ""}
           <div class="menu-wrap">
             <button class="trigger" type="button" data-toggle-account aria-expanded="${this.openMenu === "account"}">
-              <span class="avatar">${f}</span>
-              <span class="user-name">${i(b)}</span>
+              <span class="avatar">${v}</span>
+              <span class="user-name">${r(w)}</span>
               <span class="caret" aria-hidden="true">v</span>
             </button>
-            ${this.openMenu === "account" ? `<div class="menu"><div class="menu-heading">Account</div>${x}</div>` : ""}
+            ${this.openMenu === "account" ? `<div class="menu"><div class="menu-heading">Account</div>${z}</div>` : ""}
           </div>
         </div>
       </header>
     `, this.bindEvents();
   }
 }
-function L(e = M) {
-  typeof window > "u" || window.customElements.get(e) || window.customElements.define(e, F);
+function q(e = G) {
+  typeof window > "u" || window.customElements.get(e) || window.customElements.define(e, O);
 }
-function g(e) {
+function f(e) {
   const n = (e ?? "").trim();
   return n === "" || n === "#" ? "" : n.replace(/\/+$/, "") || "/";
 }
-function d(e, n, t, r) {
-  const s = g(t);
-  return s ? { slug: e, name: n, baseUrl: s, description: r } : null;
+function c(e, n, t, a) {
+  const i = f(t);
+  return i ? { slug: e, name: n, baseUrl: i, description: a } : null;
 }
-function q(e) {
-  const n = g(e);
-  return n ? `${n}?tab=profile` : "#";
+function T(e) {
+  const n = f(e);
+  return n ? `${n}?tab=account-settings` : "#";
 }
-function C(e) {
+function W(e) {
   return [
-    d("federated-services", "Federated Services", e.authBaseUrl, "Account settings and federated service administration."),
-    d("goals", "Goal Tracker", e.goalsBaseUrl, "Goals, metrics, dashboards, and progress widgets."),
-    d("money-planner", "Fluffynomics", e.moneyPlannerBaseUrl, "Accounts, expenses, contracts, investments, and net worth."),
-    d("agent", "AI Assistant", e.agentBaseUrl, "Assistant tasks, mailbox workflows, and audited agent activity."),
-    d("apartment-gate", "Apartment Gate", e.apartmentGateBaseUrl, "Protected apartment gate and door controls."),
-    d("file-share", "File Share", e.fileShareBaseUrl, "Uploads, expiring share links, and revocation.")
+    c("federated-services", "Federated Services", e.authBaseUrl, "Account settings and federated service administration."),
+    c("goals", "Goal Tracker", e.goalsBaseUrl, "Goals, metrics, dashboards, and progress widgets."),
+    c("money-planner", "Fluffynomics", e.moneyPlannerBaseUrl, "Accounts, expenses, contracts, investments, and net worth."),
+    c("agent", "AI Assistant", e.agentBaseUrl, "Assistant tasks, mailbox workflows, and audited agent activity."),
+    c("apartment-gate", "Apartment Gate", e.apartmentGateBaseUrl, "Protected apartment gate and door controls."),
+    c("file-share", "File Share", e.fileShareBaseUrl, "Uploads, expiring share links, and revocation.")
   ].filter((n) => n !== null);
 }
-const H = k({
+const N = S({
   name: "FederatedBanner",
   props: {
     appName: { type: String, required: !0 },
@@ -407,6 +515,7 @@ const H = k({
     showSignOut: { type: Boolean, default: !0 },
     user: { type: Object, default: null },
     sites: { type: Array, default: () => [] },
+    actionItems: { type: Array, default: () => [] },
     appItems: { type: Array, default: () => [] },
     accountItems: { type: Array, default: () => [] }
   },
@@ -415,13 +524,13 @@ const H = k({
     signOut: () => !0
   },
   setup(e, { emit: n }) {
-    const t = $(null);
-    function r() {
-      t.value && (t.value.user = e.user, t.value.sites = e.sites, t.value.appItems = e.appItems, t.value.accountItems = e.accountItems);
+    const t = M(null);
+    function a() {
+      t.value && (t.value.user = e.user, t.value.sites = e.sites, t.value.actionItems = e.actionItems, t.value.appItems = e.appItems, t.value.accountItems = e.accountItems);
     }
-    function s(a) {
+    function i(s) {
       var u;
-      const o = (u = a.detail) == null ? void 0 : u.action;
+      const o = (u = s.detail) == null ? void 0 : u.action;
       if (o) {
         if (o === "sign-out") {
           n("signOut");
@@ -430,17 +539,17 @@ const H = k({
         n("action", o);
       }
     }
-    return S(() => {
-      var a;
-      L(), r(), (a = t.value) == null || a.addEventListener("federated-banner-action", s);
-    }), I(() => {
-      var a;
-      (a = t.value) == null || a.removeEventListener("federated-banner-action", s);
-    }), U(
-      () => [e.user, e.sites, e.appItems, e.accountItems],
-      r,
+    return _(() => {
+      var s;
+      q(), a(), (s = t.value) == null || s.addEventListener("federated-banner-action", i);
+    }), U(() => {
+      var s;
+      (s = t.value) == null || s.removeEventListener("federated-banner-action", i);
+    }), B(
+      () => [e.user, e.sites, e.actionItems, e.appItems, e.accountItems],
+      a,
       { deep: !0 }
-    ), () => _("ghwiz-federated-banner", {
+    ), () => E("ghwiz-federated-banner", {
       ref: t,
       "app-name": e.appName,
       "app-url": e.appUrl,
@@ -450,11 +559,11 @@ const H = k({
       "show-sign-out": e.showSignOut ? "true" : "false"
     });
   }
-}), j = H;
+}), Z = N;
 export {
-  j as FederatedBanner,
-  F as GhwizFederatedBannerElement,
-  q as accountSettingsUrl,
-  C as createGhwizFederatedSites,
-  L as defineFederatedBannerElement
+  Z as FederatedBanner,
+  O as GhwizFederatedBannerElement,
+  T as accountSettingsUrl,
+  W as createGhwizFederatedSites,
+  q as defineFederatedBannerElement
 };

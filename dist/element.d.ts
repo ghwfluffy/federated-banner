@@ -3,6 +3,7 @@ export declare class GhwizFederatedBannerElement extends HTMLElement {
     private openMenu;
     private _sites;
     private _user;
+    private _actionItems;
     private _appItems;
     private _accountItems;
     static get observedAttributes(): string[];
@@ -10,6 +11,8 @@ export declare class GhwizFederatedBannerElement extends HTMLElement {
     get sites(): FederatedBannerSite[];
     set user(value: FederatedBannerUser | null | undefined);
     get user(): FederatedBannerUser | null;
+    set actionItems(value: FederatedBannerMenuItem[] | null | undefined);
+    get actionItems(): FederatedBannerMenuItem[];
     set appItems(value: FederatedBannerMenuItem[] | null | undefined);
     get appItems(): FederatedBannerMenuItem[];
     set accountItems(value: FederatedBannerMenuItem[] | null | undefined);
