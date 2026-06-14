@@ -229,7 +229,7 @@ button {
   }
 }
 `;
-function s(e) {
+function i(e) {
   return e.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 }
 function B(e) {
@@ -237,12 +237,12 @@ function B(e) {
   return t.length >= 2 ? `${t[0][0] ?? ""}${t[1][0] ?? ""}`.toUpperCase() || "GH" : (t[0] ?? n).slice(0, 2).toUpperCase() || "GH";
 }
 function G(e) {
-  const n = s(e.label);
+  const n = i(e.label);
   if (e.href && !e.disabled) {
     const t = e.external ? ' target="_blank" rel="noreferrer"' : "";
-    return `<a class="menu-link${e.danger ? " danger" : ""}" href="${s(e.href)}"${t} data-menu-close="true"><span class="item-label">${n}</span></a>`;
+    return `<a class="menu-link${e.danger ? " danger" : ""}" href="${i(e.href)}"${t} data-menu-close="true"><span class="item-label">${n}</span></a>`;
   }
-  return `<button class="menu-button${e.danger ? " danger" : ""}" type="button" data-action="${s(e.id)}"${e.disabled ? " disabled" : ""}><span class="item-label">${n}</span></button>`;
+  return `<button class="menu-button${e.danger ? " danger" : ""}" type="button" data-action="${i(e.id)}"${e.disabled ? " disabled" : ""}><span class="item-label">${n}</span></button>`;
 }
 class F extends HTMLElement {
   constructor() {
@@ -297,8 +297,8 @@ class F extends HTMLElement {
     return this.getAttribute(t) ?? r;
   }
   boolAttr(t, r = !0) {
-    const i = this.getAttribute(t);
-    return i === null ? r : i !== "false";
+    const s = this.getAttribute(t);
+    return s === null ? r : s !== "false";
   }
   closeMenus() {
     this.openMenu = null, this.render();
@@ -311,11 +311,11 @@ class F extends HTMLElement {
     }));
   }
   bindEvents() {
-    var r, i;
+    var r, s;
     const t = this.shadowRoot;
     t && ((r = t.querySelector("[data-toggle-apps]")) == null || r.addEventListener("click", () => {
       this.openMenu = this.openMenu === "apps" ? null : "apps", this.render();
-    }), (i = t.querySelector("[data-toggle-account]")) == null || i.addEventListener("click", () => {
+    }), (s = t.querySelector("[data-toggle-account]")) == null || s.addEventListener("click", () => {
       this.openMenu = this.openMenu === "account" ? null : "account", this.render();
     }), t.querySelectorAll("[data-action]").forEach((a) => {
       a.addEventListener("click", () => {
@@ -330,10 +330,10 @@ class F extends HTMLElement {
     var p, m, h;
     if (!this.shadowRoot)
       return;
-    const t = this.attr("app-name", "GHWIZ"), r = this.attr("app-url", "#"), i = this.attr("brand-label", "GHWIZ"), a = this.attr("current-app-slug", ""), o = this.attr("account-settings-url", "#"), u = this.boolAttr("show-sign-out", !0), b = ((p = this._user) == null ? void 0 : p.displayName) || ((m = this._user) == null ? void 0 : m.username) || "Account", f = (h = this._user) != null && h.avatarUrl ? `<img src="${s(this._user.avatarUrl)}" alt="">` : s(B(this._user)), w = this._sites.length > 0 ? this._sites.map((c) => `
-          <a class="menu-link" href="${s(c.baseUrl)}" ${c.slug === a ? 'aria-current="page"' : ""} data-menu-close="true">
-            <span class="item-label">${s(c.name)}</span>
-            ${c.description ? `<span class="item-description">${s(c.description)}</span>` : ""}
+    const t = this.attr("app-name", "GHWIZ"), r = this.attr("app-url", "#"), s = this.attr("brand-label", "GHWIZ"), a = this.attr("current-app-slug", ""), o = this.attr("account-settings-url", "#"), u = this.boolAttr("show-sign-out", !0), b = ((p = this._user) == null ? void 0 : p.displayName) || ((m = this._user) == null ? void 0 : m.username) || "Account", f = (h = this._user) != null && h.avatarUrl ? `<img src="${i(this._user.avatarUrl)}" alt="">` : i(B(this._user)), w = this._sites.length > 0 ? this._sites.map((c) => `
+          <a class="menu-link" href="${i(c.baseUrl)}" ${c.slug === a ? 'aria-current="page"' : ""} data-menu-close="true">
+            <span class="item-label">${i(c.name)}</span>
+            ${c.description ? `<span class="item-description">${i(c.description)}</span>` : ""}
           </a>
         `).join("") : '<div class="empty">No federated apps are configured.</div>', v = o === "#" ? [] : [{ id: "account-settings", label: "Account Settings", href: o }], y = u ? [{ id: "sign-out", label: "Sign Out", danger: !0 }] : [], x = [
       ...v,
@@ -344,11 +344,11 @@ class F extends HTMLElement {
     this.shadowRoot.innerHTML = `
       <style>${E}</style>
       <header class="banner">
-        <a class="brand" href="${s(r)}">
+        <a class="brand" href="${i(r)}">
           <span class="brand-mark">GH</span>
           <span class="brand-text">
-            <span class="brand-system">${s(i)}</span>
-            <span class="brand-app">${s(t)}</span>
+            <span class="brand-system">${i(s)}</span>
+            <span class="brand-app">${i(t)}</span>
           </span>
         </a>
         <div class="actions">
@@ -361,7 +361,7 @@ class F extends HTMLElement {
           <div class="menu-wrap">
             <button class="trigger" type="button" data-toggle-account aria-expanded="${this.openMenu === "account"}">
               <span class="avatar">${f}</span>
-              <span class="user-name">${s(b)}</span>
+              <span class="user-name">${i(b)}</span>
               <span class="caret" aria-hidden="true">v</span>
             </button>
             ${this.openMenu === "account" ? `<div class="menu"><div class="menu-heading">Account</div>${x}</div>` : ""}
@@ -379,14 +379,14 @@ function g(e) {
   return n === "" || n === "#" ? "" : n.replace(/\/+$/, "") || "/";
 }
 function d(e, n, t, r) {
-  const i = g(t);
-  return i ? { slug: e, name: n, baseUrl: i, description: r } : null;
+  const s = g(t);
+  return s ? { slug: e, name: n, baseUrl: s, description: r } : null;
 }
-function O(e) {
+function q(e) {
   const n = g(e);
   return n ? `${n}?tab=profile` : "#";
 }
-function q(e) {
+function C(e) {
   return [
     d("federated-services", "Federated Services", e.authBaseUrl, "Account settings and federated service administration."),
     d("goals", "Goal Tracker", e.goalsBaseUrl, "Goals, metrics, dashboards, and progress widgets."),
@@ -396,7 +396,7 @@ function q(e) {
     d("file-share", "File Share", e.fileShareBaseUrl, "Uploads, expiring share links, and revocation.")
   ].filter((n) => n !== null);
 }
-const C = k({
+const H = k({
   name: "FederatedBanner",
   props: {
     appName: { type: String, required: !0 },
@@ -419,7 +419,7 @@ const C = k({
     function r() {
       t.value && (t.value.user = e.user, t.value.sites = e.sites, t.value.appItems = e.appItems, t.value.accountItems = e.accountItems);
     }
-    function i(a) {
+    function s(a) {
       var u;
       const o = (u = a.detail) == null ? void 0 : u.action;
       if (o) {
@@ -432,10 +432,10 @@ const C = k({
     }
     return S(() => {
       var a;
-      L(), r(), (a = t.value) == null || a.addEventListener("federated-banner-action", i);
+      L(), r(), (a = t.value) == null || a.addEventListener("federated-banner-action", s);
     }), I(() => {
       var a;
-      (a = t.value) == null || a.removeEventListener("federated-banner-action", i);
+      (a = t.value) == null || a.removeEventListener("federated-banner-action", s);
     }), U(
       () => [e.user, e.sites, e.appItems, e.accountItems],
       r,
@@ -450,11 +450,11 @@ const C = k({
       "show-sign-out": e.showSignOut ? "true" : "false"
     });
   }
-});
+}), j = H;
 export {
-  C as FederatedBanner,
+  j as FederatedBanner,
   F as GhwizFederatedBannerElement,
-  O as accountSettingsUrl,
-  q as createGhwizFederatedSites,
+  q as accountSettingsUrl,
+  C as createGhwizFederatedSites,
   L as defineFederatedBannerElement
 };
