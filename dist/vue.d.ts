@@ -8,6 +8,10 @@ export declare const FederatedBanner: import("vue").DefineComponent<import("vue"
         type: StringConstructor;
         default: string;
     };
+    appIconUrl: {
+        type: StringConstructor;
+        default: string;
+    };
     brandLabel: {
         type: StringConstructor;
         default: string;
@@ -23,6 +27,10 @@ export declare const FederatedBanner: import("vue").DefineComponent<import("vue"
     showSignOut: {
         type: BooleanConstructor;
         default: boolean;
+    };
+    stylesheetUrl: {
+        type: StringConstructor;
+        default: string;
     };
     user: {
         type: () => FederatedBannerUser | null;
@@ -58,6 +66,10 @@ export declare const FederatedBanner: import("vue").DefineComponent<import("vue"
         type: StringConstructor;
         default: string;
     };
+    appIconUrl: {
+        type: StringConstructor;
+        default: string;
+    };
     brandLabel: {
         type: StringConstructor;
         default: string;
@@ -73,6 +85,10 @@ export declare const FederatedBanner: import("vue").DefineComponent<import("vue"
     showSignOut: {
         type: BooleanConstructor;
         default: boolean;
+    };
+    stylesheetUrl: {
+        type: StringConstructor;
+        default: string;
     };
     user: {
         type: () => FederatedBannerUser | null;
@@ -99,9 +115,11 @@ export declare const FederatedBanner: import("vue").DefineComponent<import("vue"
     onSignOut?: (() => any) | undefined;
 }>, {
     appUrl: string;
+    appIconUrl: string;
     brandLabel: string;
     accountSettingsUrl: string;
     showSignOut: boolean;
+    stylesheetUrl: string;
     user: FederatedBannerUser | null;
     sites: FederatedBannerSite[];
     actionItems: FederatedBannerMenuItem[];

@@ -1,4 +1,4 @@
-(function(i,a){typeof exports=="object"&&typeof module<"u"?a(exports,require("vue")):typeof define=="function"&&define.amd?define(["exports","vue"],a):(i=typeof globalThis<"u"?globalThis:i||self,a(i.GhwizFederatedBanner={},i.Vue))})(this,function(i,a){"use strict";var C=Object.defineProperty;var O=(i,a,u)=>a in i?C(i,a,{enumerable:!0,configurable:!0,writable:!0,value:u}):i[a]=u;var c=(i,a,u)=>O(i,typeof a!="symbol"?a+"":a,u);const u="ghwiz-federated-banner",z=`
+(function(s,r){typeof exports=="object"&&typeof module<"u"?r(exports,require("vue")):typeof define=="function"&&define.amd?define(["exports","vue"],r):(s=typeof globalThis<"u"?globalThis:s||self,r(s.GhwizFederatedBanner={},s.Vue))})(this,function(s,r){"use strict";var T=Object.defineProperty;var R=(s,r,u)=>r in s?T(s,r,{enumerable:!0,configurable:!0,writable:!0,value:u}):s[r]=u;var c=(s,r,u)=>R(s,typeof r!="symbol"?r+"":r,u);const u="ghwiz-federated-banner",z=`
 :host {
   display: block;
   color-scheme: light;
@@ -12,6 +12,7 @@
   --ghwiz-banner-shadow: 0 14px 32px rgba(15, 23, 42, 0.12);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
+:host([hidden]) { display: none; }
 *, *::before, *::after { box-sizing: border-box; }
 .banner {
   min-height: 4rem;
@@ -46,6 +47,18 @@
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0;
+}
+.brand-mark.has-icon {
+  overflow: hidden;
+  border-color: transparent;
+  background: transparent;
+}
+.brand-icon {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 7px;
+  object-fit: contain;
 }
 .brand-text {
   min-width: 0;
@@ -298,44 +311,44 @@ button {
     width: auto;
   }
 }
-`;function s(e){return e.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}function k(e){const n=((e==null?void 0:e.avatarFallback)||(e==null?void 0:e.displayName)||(e==null?void 0:e.username)||"GH").trim(),t=n.split(/[\s._-]+/).filter(Boolean);return t.length>=2?`${t[0][0]??""}${t[1][0]??""}`.toUpperCase()||"GH":(t[0]??n).slice(0,2).toUpperCase()||"GH"}function g(e,n="icon"){return e==="bell"?`<svg class="${n}" viewBox="0 0 24 24" aria-hidden="true">
+`;function a(e){return e.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}function I(e){const n=((e==null?void 0:e.avatarFallback)||(e==null?void 0:e.displayName)||(e==null?void 0:e.username)||"GH").trim(),t=n.split(/[\s._-]+/).filter(Boolean);return t.length>=2?`${t[0][0]??""}${t[1][0]??""}`.toUpperCase()||"GH":(t[0]??n).slice(0,2).toUpperCase()||"GH"}function g(e,n="icon"){return e==="bell"?`<svg class="${n}" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M10.3 21a2 2 0 0 0 3.4 0"></path>
       <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
     </svg>`:e==="external-link"?`<svg class="${n}" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M15 3h6v6"></path>
       <path d="M10 14 21 3"></path>
       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-    </svg>`:`<span aria-hidden="true">${s((e||"?").slice(0,2).toUpperCase())}</span>`}function A(e){return e==null||e===""?"":`<span class="action-badge">${s(String(e))}</span>`}function I(e){const n=s(e.label),t=g(e.icon||e.id),r=A(e.badge);if(e.href&&!e.disabled){const o=e.external?' target="_blank" rel="noreferrer"':"";return`<a class="icon-action" href="${s(e.href)}"${o} data-menu-close="true" aria-label="${n}" title="${n}">${t}${r}</a>`}return`<button class="icon-action" type="button" data-action="${s(e.id)}"${e.disabled?" disabled":""} aria-label="${n}" title="${n}">${t}${r}</button>`}function S(e){const n=s(e.label),t=e.external||e.externalIndicator?g("external-link","icon item-external-icon"):"";if(e.href&&!e.disabled){const r=e.external?' target="_blank" rel="noreferrer"':"";return`<a class="menu-link${e.danger?" danger":""}" href="${s(e.href)}"${r} data-menu-close="true"><span class="item-label">${n}</span>${t}</a>`}return`<button class="menu-button${e.danger?" danger":""}" type="button" data-action="${s(e.id)}"${e.disabled?" disabled":""}><span class="item-label">${n}</span>${t}</button>`}class b extends HTMLElement{constructor(){super(...arguments);c(this,"openMenu",null);c(this,"_sites",[]);c(this,"_user",null);c(this,"_actionItems",[]);c(this,"_appItems",[]);c(this,"_accountItems",[])}static get observedAttributes(){return["app-name","app-url","brand-label","current-app-slug","account-settings-url","show-sign-out"]}set sites(t){this._sites=Array.isArray(t)?t:[],this.render()}get sites(){return this._sites}set user(t){this._user=t??null,this.render()}get user(){return this._user}set actionItems(t){this._actionItems=Array.isArray(t)?t:[],this.render()}get actionItems(){return this._actionItems}set appItems(t){this._appItems=Array.isArray(t)?t:[],this.render()}get appItems(){return this._appItems}set accountItems(t){this._accountItems=Array.isArray(t)?t:[],this.render()}get accountItems(){return this._accountItems}connectedCallback(){this.shadowRoot||this.attachShadow({mode:"open"}),this.render()}attributeChangedCallback(){this.render()}attr(t,r=""){return this.getAttribute(t)??r}boolAttr(t,r=!0){const o=this.getAttribute(t);return o===null?r:o!=="false"}closeMenus(){this.openMenu=null,this.render()}emitAction(t){this.dispatchEvent(new CustomEvent("federated-banner-action",{bubbles:!0,composed:!0,detail:{action:t}}))}bindEvents(){var r,o;const t=this.shadowRoot;t&&((r=t.querySelector("[data-toggle-apps]"))==null||r.addEventListener("click",()=>{this.openMenu=this.openMenu==="apps"?null:"apps",this.render()}),(o=t.querySelector("[data-toggle-account]"))==null||o.addEventListener("click",()=>{this.openMenu=this.openMenu==="account"?null:"account",this.render()}),t.querySelectorAll("[data-action]").forEach(l=>{l.addEventListener("click",()=>{const d=l.dataset.action;d&&(this.closeMenus(),this.emitAction(d))})}),t.querySelectorAll("[data-menu-close]").forEach(l=>{l.addEventListener("click",()=>this.closeMenus())}))}render(){var y,x,$;if(!this.shadowRoot)return;const t=this.attr("app-name","GHWIZ"),r=this.attr("app-url","#"),o=this.attr("brand-label","GHWIZ"),l=this.attr("current-app-slug",""),d=this.attr("account-settings-url","#"),m=this.boolAttr("show-sign-out",!0),B=((y=this._user)==null?void 0:y.displayName)||((x=this._user)==null?void 0:x.username)||"Account",E=($=this._user)!=null&&$.avatarUrl?`<img src="${s(this._user.avatarUrl)}" alt="">`:s(k(this._user)),v=this._sites.length>0,F=v?this._sites.map(h=>`
-          <a class="menu-link" href="${s(h.baseUrl)}" ${h.slug===l?'aria-current="page"':""} data-menu-close="true">
-            <span class="item-label">${s(h.name)}</span>
-            ${h.description?`<span class="item-description">${s(h.description)}</span>`:""}
+    </svg>`:`<span aria-hidden="true">${a((e||"?").slice(0,2).toUpperCase())}</span>`}function A(e){return e==null||e===""?"":`<span class="action-badge">${a(String(e))}</span>`}function S(e){const n=a(e.label),t=g(e.icon||e.id),i=A(e.badge);if(e.href&&!e.disabled){const o=e.external?' target="_blank" rel="noreferrer"':"";return`<a class="icon-action" href="${a(e.href)}"${o} data-menu-close="true" aria-label="${n}" title="${n}">${t}${i}</a>`}return`<button class="icon-action" type="button" data-action="${a(e.id)}"${e.disabled?" disabled":""} aria-label="${n}" title="${n}">${t}${i}</button>`}function U(e){const n=a(e.label),t=e.external||e.externalIndicator?g("external-link","icon item-external-icon"):"";if(e.href&&!e.disabled){const i=e.external?' target="_blank" rel="noreferrer"':"";return`<a class="menu-link${e.danger?" danger":""}" href="${a(e.href)}"${i} data-menu-close="true"><span class="item-label">${n}</span>${t}</a>`}return`<button class="menu-button${e.danger?" danger":""}" type="button" data-action="${a(e.id)}"${e.disabled?" disabled":""}><span class="item-label">${n}</span>${t}</button>`}class b extends HTMLElement{constructor(){super(...arguments);c(this,"openMenu",null);c(this,"_sites",[]);c(this,"_user",null);c(this,"_actionItems",[]);c(this,"_appItems",[]);c(this,"_accountItems",[])}static get observedAttributes(){return["app-name","app-url","app-icon-url","brand-label","current-app-slug","account-settings-url","show-sign-out","stylesheet-url"]}set sites(t){this._sites=Array.isArray(t)?t:[],this.render()}get sites(){return this._sites}set user(t){this._user=t??null,this.render()}get user(){return this._user}set actionItems(t){this._actionItems=Array.isArray(t)?t:[],this.render()}get actionItems(){return this._actionItems}set appItems(t){this._appItems=Array.isArray(t)?t:[],this.render()}get appItems(){return this._appItems}set accountItems(t){this._accountItems=Array.isArray(t)?t:[],this.render()}get accountItems(){return this._accountItems}connectedCallback(){this.shadowRoot||this.attachShadow({mode:"open"}),this.render()}attributeChangedCallback(){this.render()}attr(t,i=""){return this.getAttribute(t)??i}boolAttr(t,i=!0){const o=this.getAttribute(t);return o===null?i:o!=="false"}closeMenus(){this.openMenu=null,this.render()}emitAction(t){this.dispatchEvent(new CustomEvent("federated-banner-action",{bubbles:!0,composed:!0,detail:{action:t}}))}bindEvents(){var i,o;const t=this.shadowRoot;t&&((i=t.querySelector("[data-toggle-apps]"))==null||i.addEventListener("click",()=>{this.openMenu=this.openMenu==="apps"?null:"apps",this.render()}),(o=t.querySelector("[data-toggle-account]"))==null||o.addEventListener("click",()=>{this.openMenu=this.openMenu==="account"?null:"account",this.render()}),t.querySelectorAll("[data-action]").forEach(l=>{l.addEventListener("click",()=>{const d=l.dataset.action;d&&(this.closeMenus(),this.emitAction(d))})}),t.querySelectorAll("[data-menu-close]").forEach(l=>{l.addEventListener("click",()=>this.closeMenus())}))}render(){var x,$,k;if(!this.shadowRoot)return;const t=this.attr("app-name","GHWIZ"),i=this.attr("app-url","#"),o=this.attr("app-icon-url",""),l=this.attr("brand-label","GHWIZ"),d=this.attr("current-app-slug",""),h=this.attr("account-settings-url","#"),E=this.boolAttr("show-sign-out",!0),v=this.attr("stylesheet-url",""),F=((x=this._user)==null?void 0:x.displayName)||(($=this._user)==null?void 0:$.username)||"Account",G=(k=this._user)!=null&&k.avatarUrl?`<img src="${a(this._user.avatarUrl)}" alt="">`:a(I(this._user)),y=this._sites.length>0,j=y?this._sites.map(m=>`
+          <a class="menu-link" href="${a(m.baseUrl)}" ${m.slug===d?'aria-current="page"':""} data-menu-close="true">
+            <span class="item-label">${a(m.name)}</span>
+            ${m.description?`<span class="item-description">${a(m.description)}</span>`:""}
           </a>
-        `).join(""):"",G=this._actionItems.map(I).join(""),j=d==="#"?[]:[{id:"account-settings",label:"Account Settings",href:d,externalIndicator:l!=="federated-services"}],H=m?[{id:"sign-out",label:"Sign Out",danger:!0}]:[],L=[...j,...this._accountItems,...this._appItems,...H].map(S).join("");this.shadowRoot.innerHTML=`
-      <style>${z}</style>
+        `).join(""):"",H=this._actionItems.map(S).join(""),L=h==="#"?[]:[{id:"account-settings",label:"Account Settings",href:h,externalIndicator:d!=="federated-services"}],C=E?[{id:"sign-out",label:"Sign Out",danger:!0}]:[],O=[...L,...this._accountItems,...this._appItems,...C].map(U).join(""),q=v?`<link rel="stylesheet" href="${a(v)}">`:`<style>${z}</style>`,N=o?`<span class="brand-mark has-icon"><img class="brand-icon" src="${a(o)}" alt=""></span>`:'<span class="brand-mark">GH</span>';this.shadowRoot.innerHTML=`
+      ${q}
       <header class="banner">
-        <a class="brand" href="${s(r)}">
-          <span class="brand-mark">GH</span>
+        <a class="brand" href="${a(i)}">
+          ${N}
           <span class="brand-text">
-            <span class="brand-system">${s(o)}</span>
-            <span class="brand-app">${s(t)}</span>
+            <span class="brand-system">${a(l)}</span>
+            <span class="brand-app">${a(t)}</span>
           </span>
         </a>
         <div class="actions">
-          ${G}
-          ${v?`<div class="menu-wrap">
+          ${H}
+          ${y?`<div class="menu-wrap">
             <button class="trigger" type="button" data-toggle-apps aria-expanded="${this.openMenu==="apps"}">
               <span>Apps</span><span class="caret" aria-hidden="true">v</span>
             </button>
-            ${this.openMenu==="apps"?`<div class="menu apps-menu"><div class="menu-heading">Switch App</div>${F}</div>`:""}
+            ${this.openMenu==="apps"?`<div class="menu apps-menu"><div class="menu-heading">Switch App</div>${j}</div>`:""}
           </div>`:""}
           <div class="menu-wrap">
             <button class="trigger" type="button" data-toggle-account aria-expanded="${this.openMenu==="account"}">
-              <span class="avatar">${E}</span>
-              <span class="user-name">${s(B)}</span>
+              <span class="avatar">${G}</span>
+              <span class="user-name">${a(F)}</span>
               <span class="caret" aria-hidden="true">v</span>
             </button>
-            ${this.openMenu==="account"?`<div class="menu"><div class="menu-heading">Account</div>${L}</div>`:""}
+            ${this.openMenu==="account"?`<div class="menu"><div class="menu-heading">Account</div>${O}</div>`:""}
           </div>
         </div>
       </header>
-    `,this.bindEvents()}}function f(e=u){typeof window>"u"||window.customElements.get(e)||window.customElements.define(e,b)}function w(e){const n=(e??"").trim();return n===""||n==="#"?"":n.replace(/\/+$/,"")||"/"}function p(e,n,t,r){const o=w(t);return o?{slug:e,name:n,baseUrl:o,description:r}:null}function M(e){const n=w(e);return n?`${n}?tab=account-settings`:"#"}function _(e){return[p("federated-services","Federated Services",e.authBaseUrl,"Account settings and federated service administration."),p("goals","Goal Tracker",e.goalsBaseUrl,"Goals, metrics, dashboards, and progress widgets."),p("money-planner","Fluffynomics",e.moneyPlannerBaseUrl,"Accounts, expenses, contracts, investments, and net worth."),p("agent","AI Assistant",e.agentBaseUrl,"Assistant tasks, mailbox workflows, and audited agent activity."),p("apartment-gate","Apartment Gate",e.apartmentGateBaseUrl,"Protected apartment gate and door controls."),p("file-share","File Share",e.fileShareBaseUrl,"Uploads, expiring share links, and revocation.")].filter(n=>n!==null)}const U=a.defineComponent({name:"FederatedBanner",props:{appName:{type:String,required:!0},appUrl:{type:String,default:"#"},brandLabel:{type:String,default:"GHWIZ"},currentAppSlug:{type:String,required:!0},accountSettingsUrl:{type:String,default:"#"},showSignOut:{type:Boolean,default:!0},user:{type:Object,default:null},sites:{type:Array,default:()=>[]},actionItems:{type:Array,default:()=>[]},appItems:{type:Array,default:()=>[]},accountItems:{type:Array,default:()=>[]}},emits:{action:e=>!0,signOut:()=>!0},setup(e,{emit:n}){const t=a.ref(null);function r(){t.value&&(t.value.user=e.user,t.value.sites=e.sites,t.value.actionItems=e.actionItems,t.value.appItems=e.appItems,t.value.accountItems=e.accountItems)}function o(l){var m;const d=(m=l.detail)==null?void 0:m.action;if(d){if(d==="sign-out"){n("signOut");return}n("action",d)}}return a.onMounted(()=>{var l;f(),r(),(l=t.value)==null||l.addEventListener("federated-banner-action",o)}),a.onBeforeUnmount(()=>{var l;(l=t.value)==null||l.removeEventListener("federated-banner-action",o)}),a.watch(()=>[e.user,e.sites,e.actionItems,e.appItems,e.accountItems],r,{deep:!0}),()=>a.h("ghwiz-federated-banner",{ref:t,"app-name":e.appName,"app-url":e.appUrl,"brand-label":e.brandLabel,"current-app-slug":e.currentAppSlug,"account-settings-url":e.accountSettingsUrl,"show-sign-out":e.showSignOut?"true":"false"})}});i.FederatedBanner=U,i.GhwizFederatedBannerElement=b,i.accountSettingsUrl=M,i.createGhwizFederatedSites=_,i.defineFederatedBannerElement=f,Object.defineProperty(i,Symbol.toStringTag,{value:"Module"})});
+    `,this.bindEvents()}}function f(e=u){typeof window>"u"||window.customElements.get(e)||window.customElements.define(e,b)}function w(e){const n=(e??"").trim();return n===""||n==="#"?"":n.replace(/\/+$/,"")||"/"}function p(e,n,t,i){const o=w(t);return o?{slug:e,name:n,baseUrl:o,description:i}:null}function M(e){const n=w(e);return n?`${n}?tab=account-settings`:"#"}function _(e){return[p("federated-services","Federated Services",e.authBaseUrl,"Account settings and federated service administration."),p("goals","Goal Tracker",e.goalsBaseUrl,"Goals, metrics, dashboards, and progress widgets."),p("money-planner","Fluffynomics",e.moneyPlannerBaseUrl,"Accounts, expenses, contracts, investments, and net worth."),p("agent","AI Assistant",e.agentBaseUrl,"Assistant tasks, mailbox workflows, and audited agent activity."),p("apartment-gate","Apartment Gate",e.apartmentGateBaseUrl,"Protected apartment gate and door controls."),p("file-share","File Share",e.fileShareBaseUrl,"Uploads, expiring share links, and revocation.")].filter(n=>n!==null)}const B=r.defineComponent({name:"FederatedBanner",props:{appName:{type:String,required:!0},appUrl:{type:String,default:"#"},appIconUrl:{type:String,default:""},brandLabel:{type:String,default:"GHWIZ"},currentAppSlug:{type:String,required:!0},accountSettingsUrl:{type:String,default:"#"},showSignOut:{type:Boolean,default:!0},stylesheetUrl:{type:String,default:""},user:{type:Object,default:null},sites:{type:Array,default:()=>[]},actionItems:{type:Array,default:()=>[]},appItems:{type:Array,default:()=>[]},accountItems:{type:Array,default:()=>[]}},emits:{action:e=>!0,signOut:()=>!0},setup(e,{emit:n}){const t=r.ref(null);function i(){t.value&&(t.value.user=e.user,t.value.sites=e.sites,t.value.actionItems=e.actionItems,t.value.appItems=e.appItems,t.value.accountItems=e.accountItems)}function o(l){var h;const d=(h=l.detail)==null?void 0:h.action;if(d){if(d==="sign-out"){n("signOut");return}n("action",d)}}return r.onMounted(()=>{var l;f(),i(),(l=t.value)==null||l.addEventListener("federated-banner-action",o)}),r.onBeforeUnmount(()=>{var l;(l=t.value)==null||l.removeEventListener("federated-banner-action",o)}),r.watch(()=>[e.user,e.sites,e.actionItems,e.appItems,e.accountItems],i,{deep:!0}),()=>r.h("ghwiz-federated-banner",{ref:t,"app-name":e.appName,"app-url":e.appUrl,"app-icon-url":e.appIconUrl,"brand-label":e.brandLabel,"current-app-slug":e.currentAppSlug,"account-settings-url":e.accountSettingsUrl,"show-sign-out":e.showSignOut?"true":"false","stylesheet-url":e.stylesheetUrl})}});s.FederatedBanner=B,s.GhwizFederatedBannerElement=b,s.accountSettingsUrl=M,s.createGhwizFederatedSites=_,s.defineFederatedBannerElement=f,Object.defineProperty(s,Symbol.toStringTag,{value:"Module"})});

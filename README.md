@@ -18,3 +18,9 @@ links, current user, compact action buttons, and app-local menu actions from its
 own configuration. Consumers pass an empty `sites` list outside federated mode so
 the banner keeps the same account/profile surface without showing cross-app
 links.
+
+Set `app-icon-url` (or the Vue `appIconUrl` prop) to the same favicon URL used by
+the consuming page when the app should replace the fallback `GH` mark. Strict
+content-security-policy deployments may set `stylesheet-url` to the generated
+`dist/browser/federated-banner.css` asset; other consumers keep the component's
+inline shadow-DOM stylesheet.

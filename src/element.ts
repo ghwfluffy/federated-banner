@@ -16,6 +16,7 @@ const styles = `
   --ghwiz-banner-shadow: 0 14px 32px rgba(15, 23, 42, 0.12);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
+:host([hidden]) { display: none; }
 *, *::before, *::after { box-sizing: border-box; }
 .banner {
   min-height: 4rem;
@@ -50,6 +51,18 @@ const styles = `
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0;
+}
+.brand-mark.has-icon {
+  overflow: hidden;
+  border-color: transparent;
+  background: transparent;
+}
+.brand-icon {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 7px;
+  object-fit: contain;
 }
 .brand-text {
   min-width: 0;
@@ -381,10 +394,12 @@ export class GhwizFederatedBannerElement extends HTMLElement {
     return [
       "app-name",
       "app-url",
+      "app-icon-url",
       "brand-label",
       "current-app-slug",
       "account-settings-url",
       "show-sign-out",
+      "stylesheet-url",
     ];
   }
 
@@ -503,10 +518,12 @@ export class GhwizFederatedBannerElement extends HTMLElement {
     }
     const appName = this.attr("app-name", "GHWIZ");
     const appUrl = this.attr("app-url", "#");
+    const appIconUrl = this.attr("app-icon-url", "");
     const brandLabel = this.attr("brand-label", "GHWIZ");
     const currentSlug = this.attr("current-app-slug", "");
     const accountSettingsUrl = this.attr("account-settings-url", "#");
     const showSignOut = this.boolAttr("show-sign-out", true);
+    const stylesheetUrl = this.attr("stylesheet-url", "");
     const userName = this._user?.displayName || this._user?.username || "Account";
     const avatarMarkup = this._user?.avatarUrl
       ? `<img src="${escapeHtml(this._user.avatarUrl)}" alt="">`
@@ -538,12 +555,18 @@ export class GhwizFederatedBannerElement extends HTMLElement {
       ...this._appItems,
       ...signOutItem,
     ].map(itemMarkup).join("");
+    const bannerStyles = stylesheetUrl
+      ? `<link rel="stylesheet" href="${escapeHtml(stylesheetUrl)}">`
+      : `<style>${styles}</style>`;
+    const brandMark = appIconUrl
+      ? `<span class="brand-mark has-icon"><img class="brand-icon" src="${escapeHtml(appIconUrl)}" alt=""></span>`
+      : `<span class="brand-mark">GH</span>`;
 
     this.shadowRoot.innerHTML = `
-      <style>${styles}</style>
+      ${bannerStyles}
       <header class="banner">
         <a class="brand" href="${escapeHtml(appUrl)}">
-          <span class="brand-mark">GH</span>
+          ${brandMark}
           <span class="brand-text">
             <span class="brand-system">${escapeHtml(brandLabel)}</span>
             <span class="brand-app">${escapeHtml(appName)}</span>

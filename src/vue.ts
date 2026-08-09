@@ -15,10 +15,12 @@ export const FederatedBanner = defineComponent({
   props: {
     appName: { type: String, required: true },
     appUrl: { type: String, default: "#" },
+    appIconUrl: { type: String, default: "" },
     brandLabel: { type: String, default: "GHWIZ" },
     currentAppSlug: { type: String, required: true },
     accountSettingsUrl: { type: String, default: "#" },
     showSignOut: { type: Boolean, default: true },
+    stylesheetUrl: { type: String, default: "" },
     user: { type: Object as () => FederatedBannerUser | null, default: null },
     sites: { type: Array as () => FederatedBannerSite[], default: () => [] },
     actionItems: { type: Array as () => FederatedBannerMenuItem[], default: () => [] },
@@ -75,10 +77,12 @@ export const FederatedBanner = defineComponent({
       ref: elementRef,
       "app-name": props.appName,
       "app-url": props.appUrl,
+      "app-icon-url": props.appIconUrl,
       "brand-label": props.brandLabel,
       "current-app-slug": props.currentAppSlug,
       "account-settings-url": props.accountSettingsUrl,
       "show-sign-out": props.showSignOut ? "true" : "false",
+      "stylesheet-url": props.stylesheetUrl,
     });
   },
 });
