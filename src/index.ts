@@ -1,5 +1,5 @@
 export { defineFederatedBannerElement, GhwizFederatedBannerElement } from "./element";
-export { accountSettingsUrl, createGhwizFederatedSites } from "./sites";
+export { accountSettingsUrl, createGhwizFederatedSites, parseFederatedSites } from "./sites";
 import { FederatedBanner as VueFederatedBanner } from "./vue";
 export type {
   FederatedBannerMenuItem,

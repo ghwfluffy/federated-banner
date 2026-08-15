@@ -31,3 +31,41 @@ export function createGhwizFederatedSites(config: GhwizFederatedSiteConfig): Fed
     site("file-share", "File Share", config.fileShareBaseUrl, "Uploads, expiring share links, and revocation."),
   ].filter((entry): entry is FederatedBannerSite => entry !== null);
 }
+
+/** Parse a deployment-provided JSON inventory, returning [] for bad input. */
+export function parseFederatedSites(value: string | null | undefined): FederatedBannerSite[] {
+  const raw = (value ?? "").trim();
+  if (!raw) {
+    return [];
+  }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return [];
+  }
+  if (!Array.isArray(parsed)) {
+    return [];
+  }
+
+  return parsed.flatMap((entry): FederatedBannerSite[] => {
+    if (!entry || typeof entry !== "object" || Array.isArray(entry)) {
+      return [];
+    }
+    const candidate = entry as Record<string, unknown>;
+    const slug = typeof candidate.slug === "string" ? candidate.slug.trim() : "";
+    const name = typeof candidate.name === "string" ? candidate.name.trim() : "";
+    const baseUrl = typeof candidate.baseUrl === "string" ? cleanBaseUrl(candidate.baseUrl) : "";
+    if (!slug || !name || !baseUrl) {
+      return [];
+    }
+    return [{
+      slug,
+      name,
+      baseUrl,
+      description: typeof candidate.description === "string" ? candidate.description.trim() : null,
+      icon: typeof candidate.icon === "string" ? candidate.icon.trim() : null,
+    }];
+  });
+}

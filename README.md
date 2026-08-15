@@ -9,6 +9,9 @@ The package exposes:
   registration helper.
 - `createGhwizFederatedSites`, a small helper for building the standard app
   switcher list from deployment-provided base paths.
+- `parseFederatedSites`, a safe parser for a parent deployment's shared JSON
+  inventory. Invalid input returns an empty list so standalone fallbacks remain
+  available.
 - `actionItems`, compact icon actions such as notifications that sit beside the
   app switcher and account menu.
 

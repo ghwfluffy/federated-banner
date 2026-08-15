@@ -1,8 +1,8 @@
 var M = Object.defineProperty;
 var _ = (e, n, t) => n in e ? M(e, n, { enumerable: !0, configurable: !0, writable: !0, value: t }) : e[n] = t;
-var l = (e, n, t) => _(e, typeof n != "symbol" ? n + "" : n, t);
-import { defineComponent as B, ref as E, onMounted as G, onBeforeUnmount as F, watch as H, h as L } from "vue";
-const j = "ghwiz-federated-banner", C = `
+var c = (e, n, t) => _(e, typeof n != "symbol" ? n + "" : n, t);
+import { defineComponent as B, ref as E, onMounted as F, onBeforeUnmount as G, watch as j, h as H } from "vue";
+const L = "ghwiz-federated-banner", C = `
 :host {
   display: block;
   color-scheme: light;
@@ -316,14 +316,14 @@ button {
   }
 }
 `;
-function a(e) {
+function i(e) {
   return e.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 }
 function O(e) {
   const n = ((e == null ? void 0 : e.avatarFallback) || (e == null ? void 0 : e.displayName) || (e == null ? void 0 : e.username) || "GH").trim(), t = n.split(/[\s._-]+/).filter(Boolean);
   return t.length >= 2 ? `${t[0][0] ?? ""}${t[1][0] ?? ""}`.toUpperCase() || "GH" : (t[0] ?? n).slice(0, 2).toUpperCase() || "GH";
 }
-function f(e, n = "icon") {
+function w(e, n = "icon") {
   return e === "bell" ? `<svg class="${n}" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M10.3 21a2 2 0 0 0 3.4 0"></path>
       <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
@@ -331,36 +331,36 @@ function f(e, n = "icon") {
       <path d="M15 3h6v6"></path>
       <path d="M10 14 21 3"></path>
       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-    </svg>` : `<span aria-hidden="true">${a((e || "?").slice(0, 2).toUpperCase())}</span>`;
+    </svg>` : `<span aria-hidden="true">${i((e || "?").slice(0, 2).toUpperCase())}</span>`;
 }
 function q(e) {
-  return e == null || e === "" ? "" : `<span class="action-badge">${a(String(e))}</span>`;
+  return e == null || e === "" ? "" : `<span class="action-badge">${i(String(e))}</span>`;
 }
 function N(e) {
-  const n = a(e.label), t = f(e.icon || e.id), r = q(e.badge);
-  if (e.href && !e.disabled) {
-    const i = e.external ? ' target="_blank" rel="noreferrer"' : "";
-    return `<a class="icon-action" href="${a(e.href)}"${i} data-menu-close="true" aria-label="${n}" title="${n}">${t}${r}</a>`;
-  }
-  return `<button class="icon-action" type="button" data-action="${a(e.id)}"${e.disabled ? " disabled" : ""} aria-label="${n}" title="${n}">${t}${r}</button>`;
-}
-function R(e) {
-  const n = a(e.label), t = e.external || e.externalIndicator ? f("external-link", "icon item-external-icon") : "";
+  const n = i(e.label), t = w(e.icon || e.id), a = q(e.badge);
   if (e.href && !e.disabled) {
     const r = e.external ? ' target="_blank" rel="noreferrer"' : "";
-    return `<a class="menu-link${e.danger ? " danger" : ""}" href="${a(e.href)}"${r} data-menu-close="true"><span class="item-label">${n}</span>${t}</a>`;
+    return `<a class="icon-action" href="${i(e.href)}"${r} data-menu-close="true" aria-label="${n}" title="${n}">${t}${a}</a>`;
   }
-  return `<button class="menu-button${e.danger ? " danger" : ""}" type="button" data-action="${a(e.id)}"${e.disabled ? " disabled" : ""}><span class="item-label">${n}</span>${t}</button>`;
+  return `<button class="icon-action" type="button" data-action="${i(e.id)}"${e.disabled ? " disabled" : ""} aria-label="${n}" title="${n}">${t}${a}</button>`;
+}
+function R(e) {
+  const n = i(e.label), t = e.external || e.externalIndicator ? w("external-link", "icon item-external-icon") : "";
+  if (e.href && !e.disabled) {
+    const a = e.external ? ' target="_blank" rel="noreferrer"' : "";
+    return `<a class="menu-link${e.danger ? " danger" : ""}" href="${i(e.href)}"${a} data-menu-close="true"><span class="item-label">${n}</span>${t}</a>`;
+  }
+  return `<button class="menu-button${e.danger ? " danger" : ""}" type="button" data-action="${i(e.id)}"${e.disabled ? " disabled" : ""}><span class="item-label">${n}</span>${t}</button>`;
 }
 class P extends HTMLElement {
   constructor() {
     super(...arguments);
-    l(this, "openMenu", null);
-    l(this, "_sites", []);
-    l(this, "_user", null);
-    l(this, "_actionItems", []);
-    l(this, "_appItems", []);
-    l(this, "_accountItems", []);
+    c(this, "openMenu", null);
+    c(this, "_sites", []);
+    c(this, "_user", null);
+    c(this, "_actionItems", []);
+    c(this, "_appItems", []);
+    c(this, "_accountItems", []);
   }
   static get observedAttributes() {
     return [
@@ -410,12 +410,12 @@ class P extends HTMLElement {
   attributeChangedCallback() {
     this.render();
   }
-  attr(t, r = "") {
-    return this.getAttribute(t) ?? r;
+  attr(t, a = "") {
+    return this.getAttribute(t) ?? a;
   }
-  boolAttr(t, r = !0) {
-    const i = this.getAttribute(t);
-    return i === null ? r : i !== "false";
+  boolAttr(t, a = !0) {
+    const r = this.getAttribute(t);
+    return r === null ? a : r !== "false";
   }
   closeMenus() {
     this.openMenu = null, this.render();
@@ -428,11 +428,11 @@ class P extends HTMLElement {
     }));
   }
   bindEvents() {
-    var r, i;
+    var a, r;
     const t = this.shadowRoot;
-    t && ((r = t.querySelector("[data-toggle-apps]")) == null || r.addEventListener("click", () => {
+    t && ((a = t.querySelector("[data-toggle-apps]")) == null || a.addEventListener("click", () => {
       this.openMenu = this.openMenu === "apps" ? null : "apps", this.render();
-    }), (i = t.querySelector("[data-toggle-account]")) == null || i.addEventListener("click", () => {
+    }), (r = t.querySelector("[data-toggle-account]")) == null || r.addEventListener("click", () => {
       this.openMenu = this.openMenu === "account" ? null : "account", this.render();
     }), t.querySelectorAll("[data-action]").forEach((s) => {
       s.addEventListener("click", () => {
@@ -444,38 +444,38 @@ class P extends HTMLElement {
     }));
   }
   render() {
-    var m, g, b;
+    var g, b, f;
     if (!this.shadowRoot)
       return;
-    const t = this.attr("app-name", "GHWIZ"), r = this.attr("app-url", "#"), i = this.attr("app-icon-url", ""), s = this.attr("brand-label", "GHWIZ"), o = this.attr("current-app-slug", ""), d = this.attr("account-settings-url", "#"), v = this.boolAttr("show-sign-out", !0), p = this.attr("stylesheet-url", ""), y = ((m = this._user) == null ? void 0 : m.displayName) || ((g = this._user) == null ? void 0 : g.username) || "Account", x = (b = this._user) != null && b.avatarUrl ? `<img src="${a(this._user.avatarUrl)}" alt="">` : a(O(this._user)), h = this._sites.length > 0, $ = h ? this._sites.map((u) => `
-          <a class="menu-link" href="${a(u.baseUrl)}" ${u.slug === o ? 'aria-current="page"' : ""} data-menu-close="true">
-            <span class="item-label">${a(u.name)}</span>
-            ${u.description ? `<span class="item-description">${a(u.description)}</span>` : ""}
+    const t = this.attr("app-name", "GHWIZ"), a = this.attr("app-url", "#"), r = this.attr("app-icon-url", ""), s = this.attr("brand-label", "GHWIZ"), o = this.attr("current-app-slug", ""), l = this.attr("account-settings-url", "#"), v = this.boolAttr("show-sign-out", !0), h = this.attr("stylesheet-url", ""), y = ((g = this._user) == null ? void 0 : g.displayName) || ((b = this._user) == null ? void 0 : b.username) || "Account", x = (f = this._user) != null && f.avatarUrl ? `<img src="${i(this._user.avatarUrl)}" alt="">` : i(O(this._user)), m = this._sites.length > 0, $ = m ? this._sites.map((u) => `
+          <a class="menu-link" href="${i(u.baseUrl)}" ${u.slug === o ? 'aria-current="page"' : ""} data-menu-close="true">
+            <span class="item-label">${i(u.name)}</span>
+            ${u.description ? `<span class="item-description">${i(u.description)}</span>` : ""}
           </a>
-        `).join("") : "", k = this._actionItems.map(N).join(""), z = d === "#" ? [] : [{
+        `).join("") : "", k = this._actionItems.map(N).join(""), z = l === "#" ? [] : [{
       id: "account-settings",
       label: "Account Settings",
-      href: d,
+      href: l,
       externalIndicator: o !== "federated-services"
-    }], I = v ? [{ id: "sign-out", label: "Sign Out", danger: !0 }] : [], A = [
+    }], A = v ? [{ id: "sign-out", label: "Sign Out", danger: !0 }] : [], I = [
       ...z,
       ...this._accountItems,
       ...this._appItems,
-      ...I
-    ].map(R).join(""), S = p ? `<link rel="stylesheet" href="${a(p)}">` : `<style>${C}</style>`, U = i ? `<span class="brand-mark has-icon"><img class="brand-icon" src="${a(i)}" alt=""></span>` : '<span class="brand-mark">GH</span>';
+      ...A
+    ].map(R).join(""), S = h ? `<link rel="stylesheet" href="${i(h)}">` : `<style>${C}</style>`, U = r ? `<span class="brand-mark has-icon"><img class="brand-icon" src="${i(r)}" alt=""></span>` : '<span class="brand-mark">GH</span>';
     this.shadowRoot.innerHTML = `
       ${S}
       <header class="banner">
-        <a class="brand" href="${a(r)}">
+        <a class="brand" href="${i(a)}">
           ${U}
           <span class="brand-text">
-            <span class="brand-system">${a(s)}</span>
-            <span class="brand-app">${a(t)}</span>
+            <span class="brand-system">${i(s)}</span>
+            <span class="brand-app">${i(t)}</span>
           </span>
         </a>
         <div class="actions">
           ${k}
-          ${h ? `<div class="menu-wrap">
+          ${m ? `<div class="menu-wrap">
             <button class="trigger" type="button" data-toggle-apps aria-expanded="${this.openMenu === "apps"}">
               <span>Apps</span><span class="caret" aria-hidden="true">v</span>
             </button>
@@ -484,40 +484,63 @@ class P extends HTMLElement {
           <div class="menu-wrap">
             <button class="trigger" type="button" data-toggle-account aria-expanded="${this.openMenu === "account"}">
               <span class="avatar">${x}</span>
-              <span class="user-name">${a(y)}</span>
+              <span class="user-name">${i(y)}</span>
               <span class="caret" aria-hidden="true">v</span>
             </button>
-            ${this.openMenu === "account" ? `<div class="menu"><div class="menu-heading">Account</div>${A}</div>` : ""}
+            ${this.openMenu === "account" ? `<div class="menu"><div class="menu-heading">Account</div>${I}</div>` : ""}
           </div>
         </div>
       </header>
     `, this.bindEvents();
   }
 }
-function T(e = j) {
+function T(e = L) {
   typeof window > "u" || window.customElements.get(e) || window.customElements.define(e, P);
 }
-function w(e) {
+function p(e) {
   const n = (e ?? "").trim();
   return n === "" || n === "#" ? "" : n.replace(/\/+$/, "") || "/";
 }
-function c(e, n, t, r) {
-  const i = w(t);
-  return i ? { slug: e, name: n, baseUrl: i, description: r } : null;
-}
-function V(e) {
-  const n = w(e);
-  return n ? `${n}?tab=account-settings` : "#";
+function d(e, n, t, a) {
+  const r = p(t);
+  return r ? { slug: e, name: n, baseUrl: r, description: a } : null;
 }
 function J(e) {
+  const n = p(e);
+  return n ? `${n}?tab=account-settings` : "#";
+}
+function V(e) {
   return [
-    c("federated-services", "Federated Services", e.authBaseUrl, "Account settings and federated service administration."),
-    c("goals", "Goal Tracker", e.goalsBaseUrl, "Goals, metrics, dashboards, and progress widgets."),
-    c("money-planner", "Fluffynomics", e.moneyPlannerBaseUrl, "Accounts, expenses, contracts, investments, and net worth."),
-    c("agent", "AI Assistant", e.agentBaseUrl, "Assistant tasks, mailbox workflows, and audited agent activity."),
-    c("apartment-gate", "Apartment Gate", e.apartmentGateBaseUrl, "Protected apartment gate and door controls."),
-    c("file-share", "File Share", e.fileShareBaseUrl, "Uploads, expiring share links, and revocation.")
+    d("federated-services", "Federated Services", e.authBaseUrl, "Account settings and federated service administration."),
+    d("goals", "Goal Tracker", e.goalsBaseUrl, "Goals, metrics, dashboards, and progress widgets."),
+    d("money-planner", "Fluffynomics", e.moneyPlannerBaseUrl, "Accounts, expenses, contracts, investments, and net worth."),
+    d("agent", "AI Assistant", e.agentBaseUrl, "Assistant tasks, mailbox workflows, and audited agent activity."),
+    d("apartment-gate", "Apartment Gate", e.apartmentGateBaseUrl, "Protected apartment gate and door controls."),
+    d("file-share", "File Share", e.fileShareBaseUrl, "Uploads, expiring share links, and revocation.")
   ].filter((n) => n !== null);
+}
+function K(e) {
+  const n = (e ?? "").trim();
+  if (!n)
+    return [];
+  let t;
+  try {
+    t = JSON.parse(n);
+  } catch {
+    return [];
+  }
+  return Array.isArray(t) ? t.flatMap((a) => {
+    if (!a || typeof a != "object" || Array.isArray(a))
+      return [];
+    const r = a, s = typeof r.slug == "string" ? r.slug.trim() : "", o = typeof r.name == "string" ? r.name.trim() : "", l = typeof r.baseUrl == "string" ? p(r.baseUrl) : "";
+    return !s || !o || !l ? [] : [{
+      slug: s,
+      name: o,
+      baseUrl: l,
+      description: typeof r.description == "string" ? r.description.trim() : null,
+      icon: typeof r.icon == "string" ? r.icon.trim() : null
+    }];
+  }) : [];
 }
 const W = B({
   name: "FederatedBanner",
@@ -542,12 +565,12 @@ const W = B({
   },
   setup(e, { emit: n }) {
     const t = E(null);
-    function r() {
+    function a() {
       t.value && (t.value.user = e.user, t.value.sites = e.sites, t.value.actionItems = e.actionItems, t.value.appItems = e.appItems, t.value.accountItems = e.accountItems);
     }
-    function i(s) {
-      var d;
-      const o = (d = s.detail) == null ? void 0 : d.action;
+    function r(s) {
+      var l;
+      const o = (l = s.detail) == null ? void 0 : l.action;
       if (o) {
         if (o === "sign-out") {
           n("signOut");
@@ -556,17 +579,17 @@ const W = B({
         n("action", o);
       }
     }
-    return G(() => {
+    return F(() => {
       var s;
-      T(), r(), (s = t.value) == null || s.addEventListener("federated-banner-action", i);
-    }), F(() => {
+      T(), a(), (s = t.value) == null || s.addEventListener("federated-banner-action", r);
+    }), G(() => {
       var s;
-      (s = t.value) == null || s.removeEventListener("federated-banner-action", i);
-    }), H(
+      (s = t.value) == null || s.removeEventListener("federated-banner-action", r);
+    }), j(
       () => [e.user, e.sites, e.actionItems, e.appItems, e.accountItems],
-      r,
+      a,
       { deep: !0 }
-    ), () => L("ghwiz-federated-banner", {
+    ), () => H("ghwiz-federated-banner", {
       ref: t,
       "app-name": e.appName,
       "app-url": e.appUrl,
@@ -578,11 +601,12 @@ const W = B({
       "stylesheet-url": e.stylesheetUrl
     });
   }
-}), K = W;
+}), Q = W;
 export {
-  K as FederatedBanner,
+  Q as FederatedBanner,
   P as GhwizFederatedBannerElement,
-  V as accountSettingsUrl,
-  J as createGhwizFederatedSites,
-  T as defineFederatedBannerElement
+  J as accountSettingsUrl,
+  V as createGhwizFederatedSites,
+  T as defineFederatedBannerElement,
+  K as parseFederatedSites
 };
